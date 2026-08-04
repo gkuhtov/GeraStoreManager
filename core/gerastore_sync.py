@@ -117,7 +117,6 @@ class GeraStoreSync:
         )
 
 
-
     def find_old_app(
         self,
         apps,
@@ -500,6 +499,15 @@ class GeraStoreSync:
 
     def write_repo(self):
 
+        """
+        Пишет ТОЛЬКО в опубликованный файл:
+        ~/GeraStore/repo.json
+
+        Локальное состояние менеджера
+        (data/repo.json) обновляется
+        только после успешного publish.
+        """
+
         repo = self.build_repo()
 
         with open(
@@ -517,6 +525,17 @@ class GeraStoreSync:
 
         return repo
 
+
+
+    def save_manager_repo(
+        self,
+        repo
+    ):
+
+        """
+        Обновляет локальное состояние
+        менеджера после успешной публикации.
+        """
 
 
     def git(
@@ -598,8 +617,20 @@ class GeraStoreSync:
         commit_message="GeraStore update"
     ):
 
-        self.write_repo()
+        # 1. Собираем новый repo и пишем
+        #    только в ~/GeraStore/repo.json
+        repo = self.write_repo()
 
-        return self.publish(
+        # 2. Публикуем
+        result = self.publish(
             commit_message
         )
+
+        # 3. Только после успешной публикации
+        #    обновляем локальное состояние
+        #    менеджера (data/repo.json)
+        if result.get("changed"):
+
+            self.save_manager_repo(repo)
+
+        return result
