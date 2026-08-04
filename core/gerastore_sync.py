@@ -146,6 +146,11 @@ class GeraStoreSync:
             []
         )
 
+        old_source_time = old.get(
+            "sourceUpdateTime",
+            ""
+        )
+
         repo_time = now_time()
 
         apps = []
@@ -340,10 +345,30 @@ class GeraStoreSync:
 
 
 
+            category = app.get(
+                "category",
+                "Utilities"
+            )
+
+
+            category_map = {
+                "Games": 0,
+                "Utilities": 1,
+                "Emulators": 2
+            }
+
+
             apps.append({
 
                 "appType":
                 "SELF_SIGN",
+
+
+                "appCateIndex":
+                category_map.get(
+                    category,
+                    1
+                ),
 
 
                 "appUpdateTime":
@@ -425,13 +450,6 @@ class GeraStoreSync:
                 icon,
 
 
-                "category":
-                app.get(
-                    "category",
-                    "Utilities"
-                ),
-
-
                 "version":
                 latest.get(
                     "version",
@@ -465,6 +483,16 @@ class GeraStoreSync:
 
 
 
+        source_update_time = old_source_time
+
+        for app in apps:
+            if app.get(
+                "appUpdateTime"
+            ) == repo_time:
+                source_update_time = repo_time
+                break
+
+
         return {
 
             "version":
@@ -482,12 +510,36 @@ class GeraStoreSync:
             "ГЕРЫЧ",
 
 
+            "sourceExportEnable":
+            True,
+
+
+            "sourceLinkTitle":
+            "GitHub",
+
+
+            "sourceLinkUrl":
+            "https://github.com/gkuhtov/GeraStore",
+
+
+            "sourceImage":
+            "https://gkuhtov.github.io/GeraStore/icons/app_icon.png",
+
+
             "sourceDescription":
             "Каталог IPA приложений для GBox.",
 
 
             "sourceUpdateTime":
-            repo_time,
+            source_update_time,
+
+
+            "appCategories":
+            [
+                "Games",
+                "Utilities",
+                "Emulators"
+            ],
 
 
             "appRepositories":
