@@ -6,7 +6,7 @@
       "name": "Board Adventure",
       "bundleIdentifier": "com.moonactive.cmboard",
       "developerName": "ГЕРЫЧ",
-      "category": "Games",
+      "category": "Игры",
       "subtitle": "ХУЕТА ЕБАНАЯ",
       "localizedDescription": "И ТЫ ТОЖЕ, ХУЕТА ЕБАНАЯ, БЛЯДЬ! ТЕСТ НОВОГО ОБНОВЛЕНИЯ 2. ТЕСТ АВТОМАТИЧЕСКОГО ОБНОВЛЕНИЯ 123. GeraStore AUTO UPDATE TEST 456.  TEST_SYNC_777 SOURCE_TIME_TEST",
       "iconURL": "assets/icons/app_icon.png",
@@ -34,7 +34,7 @@
           "size": 148911591
         }
       ],
-      "category": ""
+      "category": "Утилиты"
     },
     {
       "name": "А-Ключ",
@@ -50,7 +50,8 @@
           "downloadURL": "https://github.com/gkuhtov/GeraStore/releases/download/gerastore-com.kluchapp.prod-2.0.0/Alfabank.ipa",
           "size": 225693759
         }
-      ]
+      ],
+      "category": "Утилиты"
     }
   ]
 }
