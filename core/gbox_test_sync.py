@@ -6,7 +6,7 @@ from datetime import datetime, timezone
 MANAGER_APPS = "data/apps.json"
 
 TEST_REPO = os.path.expanduser(
-    "~/GeraStore-Test"
+    "~/Projects/GeraStore-Test"
 )
 
 REPO_FILE = os.path.join(

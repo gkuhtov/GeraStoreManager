@@ -1,13 +1,106 @@
+
+
+from datetime import datetime
+
+
+
+def normalize_compare_value(value, field=""):
+    if value is None:
+        return ""
+
+    value = str(value).strip()
+
+    if field in [
+        "size",
+        "fileSize"
+    ]:
+        try:
+            return str(int(value))
+        except Exception:
+            return value
+
+
+    if field == "iconURL":
+
+        if "icons/" in value:
+            return value.split("icons/")[-1]
+
+        if "assets/icons/" in value:
+            return value.split("assets/icons/")[-1]
+
+        return value
+
+
+    if field in [
+        "localizedDescription",
+        "appDescription"
+    ]:
+
+        lines = []
+
+        for line in value.splitlines():
+
+            line = line.strip()
+
+            while line.endswith((".", "!", "?")):
+                line = line[:-1]
+
+            lines.append(line)
+
+        return "\n".join(lines)
+
+
+    return value
+
+
+def normalize_value(value):
+    if value is None:
+        return ""
+
+    if isinstance(value, str):
+        return value.strip()
+
+    return value
+
+
+
+def normalize_time(value):
+    if not value:
+        return ""
+
+    try:
+        value = value.replace("Z", "+00:00")
+
+        dt = datetime.fromisoformat(value)
+
+        return dt.strftime("%Y-%m-%dT%H:%M")
+
+    except Exception:
+        return value
 import json
 import os
 import subprocess
+import plistlib
+from urllib.request import Request, urlopen
+from datetime import datetime
 from datetime import datetime, timezone
+from pathlib import Path
+
+def normalize_value(value):
+    if value is None:
+        return ""
+
+    if isinstance(value, str):
+        return value.strip()
+
+    return value
+
 
 
 MANAGER_APPS = "data/apps.json"
 
 GERASTORE_DIR = os.path.expanduser(
-    "~/GeraStore"
+    "~/Projects/GeraStore"
 )
 
 GERASTORE_REPO = os.path.join(
@@ -29,6 +122,99 @@ def now_time():
         "%Y-%m-%dT%H:%M:%S%z"
     )
 
+
+def get_plist_file_size(plist_url):
+    if not plist_url:
+        return 0
+
+    try:
+        request = Request(
+            plist_url,
+            headers={
+                "User-Agent": "GeraStoreManager/1.0"
+            }
+        )
+
+        with urlopen(
+            request,
+            timeout=15
+        ) as response:
+            plist_data = response.read()
+
+        data = plistlib.loads(plist_data)
+
+        items = data.get(
+            "items",
+            []
+        )
+
+        if not items:
+            return 0
+
+        metadata = items[0].get(
+            "metadata",
+            {}
+        )
+
+        file_size = metadata.get(
+            "file-size",
+            metadata.get(
+                "size",
+                0
+            )
+        )
+
+        try:
+            return int(file_size)
+        except Exception:
+            return 0
+
+    except Exception as e:
+        print(
+            "Не удалось получить размер из appPlist:",
+            plist_url,
+            "|",
+            e
+        )
+
+        return 0
+
+
+
+def get_download_file_size(download_url):
+    if not download_url:
+        return 0
+
+    try:
+        request = Request(
+            download_url,
+            method="HEAD",
+            headers={
+                "User-Agent": "Mozilla/5.0"
+            }
+        )
+
+        with urlopen(
+            request,
+            timeout=20
+        ) as response:
+
+            content_length = response.headers.get(
+                "Content-Length"
+            )
+
+            if content_length:
+                return int(content_length)
+
+    except Exception as e:
+        print(
+            "Не удалось получить размер IPA:",
+            download_url,
+            "|",
+            e
+        )
+
+    return 0
 
 def absolute_icon_url(icon):
 
@@ -174,6 +360,33 @@ class GeraStoreSync:
                     0
                 )
 
+                plist_url = version.get(
+                    "appPlist",
+                    ""
+                )
+
+                plist_size = get_plist_file_size(
+                    plist_url
+                )
+
+                if plist_size:
+                    size = plist_size
+
+                else:
+
+                    download_url = version.get(
+                        "downloadURL",
+                        ""
+                    )
+
+                    download_size = get_download_file_size(
+                        download_url
+                    )
+
+                    if download_size:
+                        size = download_size
+
+
 
                 versions.append({
 
@@ -198,8 +411,38 @@ class GeraStoreSync:
                     "size":
                     size,
 
+                    "appSize":
+                    size,
+
                     "fileSize":
-                    size
+                    size,
+
+                    "appFileSize":
+                    size,
+
+                    "appPlist":
+                    version.get(
+                        "appPlist",
+                        ""
+                    ),
+
+                    "category":
+                    app.get(
+                        "category",
+                        ""
+                    ),
+
+                    "localizedDescription":
+                    app.get(
+                        "localizedDescription",
+                        ""
+                    ).strip(),
+
+                    "iconURL":
+                    app.get(
+                        "iconURL",
+                        ""
+                    )
 
                 })
 
@@ -208,7 +451,15 @@ class GeraStoreSync:
             latest = (
                 versions[-1]
                 if versions
-                else {}
+                else {
+                    "version": app.get("version", ""),
+                    "downloadURL": app.get("downloadURL", ""),
+                    "size": app.get("size", 0),
+                    "fileSize": app.get("fileSize", 0),
+                    "category": app.get("category", ""),
+                    "localizedDescription": app.get("localizedDescription", ""),
+                    "iconURL": app.get("iconURL", "")
+                }
             )
 
 
@@ -248,89 +499,146 @@ class GeraStoreSync:
 
             else:
 
-                changed = (
 
-                    old_app.get(
+
+                fields = [
+                    "version",
+                    "downloadURL",
+                    "size",
+                    "fileSize",
+                    "category",
+                    "subtitle",
+                    "localizedDescription",
+                    "iconURL"
+                ]
+
+                for field in fields:
+                    old_value = old_app.get(field, "")
+                    
+                    if field in [
                         "version",
-                        ""
-                    )
-                    != latest.get(
-                        "version",
-                        ""
-                    )
-
-                    or
-
-                    old_app.get(
                         "downloadURL",
-                        ""
-                    )
-                    != latest.get(
-                        "downloadURL",
-                        ""
-                    )
-
-                    or
-
-                    old_app.get(
                         "size",
-                        0
-                    )
-                    != size
+                        "fileSize"
+                    ]:
+                        new_value = latest.get(
+                            field,
+                            ""
+                        )
+                    else:
+                        new_value = app.get(
+                            field,
+                            ""
+                        )
 
-                    or
+                    if normalize_compare_value(old_value, field) != normalize_compare_value(new_value, field):
 
-                    old_app.get(
-                        "iconURL",
-                        ""
-                    )
-                    != icon
+                        if field in [
+                            "category",
+                            "localizedDescription",
+                            "iconURL"
+                        ]:
+                            continue
 
-                    or
+                        print(
+                            "DIFFER:",
+                            field,
+                            "\n OLD:",
+                            old_value,
+                            "\n NEW:",
+                            new_value
+                        )
 
-                    old_app.get(
-                        "localizedDescription",
-                        ""
-                    )
-                    != app.get(
-                        "localizedDescription",
-                        ""
-                    )
 
-                    or
-
-                    old_app.get(
-                        "subtitle",
-                        ""
-                    )
-                    != app.get(
-                        "subtitle",
-                        ""
-                    )
-
-                    or
-
-                    old_app.get(
-                        "developerName",
-                        ""
-                    )
-                    != app.get(
-                        "developerName",
-                        ""
-                    )
-
-                    or
-
-                    old_app.get(
-                        "category",
-                        ""
-                    )
-                    != app.get(
-                        "category",
-                        "Utilities"
-                    )
-
+                old_version = old_app.get(
+                    "version",
+                    ""
                 )
+
+                new_version = latest.get(
+                    "version",
+                    ""
+                )
+
+
+                old_download = old_app.get(
+                    "downloadURL",
+                    ""
+                )
+
+                new_download = latest.get(
+                    "downloadURL",
+                    ""
+                )
+
+
+                old_size = old_app.get(
+                    "size",
+                    0
+                )
+
+                new_size = latest.get(
+                    "size",
+                    0
+                )
+
+
+                old_file_size = old_app.get(
+                    "fileSize",
+                    0
+                )
+
+                new_file_size = latest.get(
+                    "fileSize",
+                    0
+                )
+
+
+                old_icon = old_app.get(
+                    "iconURL",
+                    ""
+                )
+
+                new_icon = app.get(
+                    "iconURL",
+                    ""
+                )
+
+
+                if new_icon.startswith(
+                    "assets/icons/"
+                ):
+
+                    new_icon = (
+                        "https://gkuhtov.github.io/"
+                        "GeraStore/icons/"
+                        +
+                        new_icon.replace(
+                            "assets/icons/",
+                            ""
+                        )
+                    )
+
+
+                changed = any([
+
+                    old_version != new_version,
+
+                    old_download != new_download,
+
+                    old_size != new_size,
+
+                    old_file_size != new_file_size
+
+                ])
+
+
+            if changed:
+                if changed:
+                    print(
+                        "Изменено:",
+                        app.get("name")
+                    )
 
 
             update_time = repo_time
@@ -347,8 +655,12 @@ class GeraStoreSync:
 
             category = app.get(
                 "category",
-                "Utilities"
+                "Утилиты"
             )
+
+
+            if category == "БАНК":
+                category = "Финансы"
 
 
             category_map = {
@@ -423,7 +735,7 @@ class GeraStoreSync:
                 app.get(
                     "localizedDescription",
                     ""
-                ),
+                ).strip(),
 
 
                 "name":
@@ -455,7 +767,7 @@ class GeraStoreSync:
                 app.get(
                     "localizedDescription",
                     ""
-                ),
+                ).strip(),
 
 
                 "iconURL":
@@ -485,6 +797,10 @@ class GeraStoreSync:
 
 
                 "fileSize":
+                size,
+
+
+                "appFileSize":
                 size,
 
 
@@ -577,7 +893,7 @@ class GeraStoreSync:
 
         """
         Пишет ТОЛЬКО в опубликованный файл:
-        ~/GeraStore/repo.json
+        ~/Projects/GeraStore/repo.json
 
         Локальное состояние менеджера
         (data/repo.json) обновляется
@@ -646,9 +962,42 @@ class GeraStoreSync:
         commit_message="GeraStore update"
     ):
 
+        current = self.git(
+            "show",
+            "HEAD:repo.json"
+        )
+
+
+        repo_file = Path(
+            GERASTORE_DIR
+        ) / "repo.json"
+
+
+        with open(
+            repo_file,
+            "r",
+            encoding="utf-8"
+        ) as f:
+
+            new = f.read()
+
+
+        if current.strip() == new.strip():
+
+            return {
+                "changed": False,
+                "message": "Нет изменений"
+            }
+
+
         self.git(
             "add",
             "repo.json"
+        )
+
+        self.git(
+            "add",
+            "plist"
         )
 
 
@@ -659,12 +1008,31 @@ class GeraStoreSync:
         )
 
 
-        if not staged:
+        if not staged.strip():
 
             return {
                 "changed": False,
                 "message": "Нет изменений"
             }
+
+
+        diff = self.git(
+            "diff",
+            "--cached"
+        )
+
+
+        if not diff.strip():
+
+            return {
+                "changed": False,
+                "message": "Нет изменений"
+            }
+
+
+        print("\n===== REPO.JSON CHANGE =====")
+        print(diff[:3000])
+        print("============================\n")
 
 
         self.git(
@@ -694,7 +1062,7 @@ class GeraStoreSync:
     ):
 
         # 1. Собираем новый repo и пишем
-        #    только в ~/GeraStore/repo.json
+        #    только в ~/Projects/GeraStore/repo.json
         repo = self.write_repo()
 
         # 2. Публикуем

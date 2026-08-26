@@ -26,12 +26,50 @@ class GitHubRelease:
             "X-GitHub-Api-Version": "2022-11-28"
         }
 
+    def get_release_by_tag(
+        self,
+        tag
+    ):
+
+        url = (
+            f"{self.api_url}/releases/tags/"
+            f"{tag}"
+        )
+
+        response = requests.get(
+            url,
+            headers=self.headers,
+            timeout=30
+        )
+
+        if response.status_code == 404:
+            return None
+
+        response.raise_for_status()
+
+        return response.json()
+
+
+
     def create_release(
         self,
         tag,
         name,
         description=""
     ):
+
+        existing = self.get_release_by_tag(
+            tag
+        )
+
+        if existing:
+            print(
+                "GitHub Release уже существует:",
+                tag
+            )
+
+            return existing
+
 
         url = f"{self.api_url}/releases"
 
@@ -43,6 +81,9 @@ class GitHubRelease:
             "prerelease": False
         }
 
+        print("GITHUB RELEASE DATA:")
+        print(data)
+
         response = requests.post(
             url,
             headers=self.headers,
@@ -50,9 +91,40 @@ class GitHubRelease:
             timeout=30
         )
 
+        if response.status_code >= 400:
+            print("GITHUB ERROR:")
+            print(response.text)
+
         response.raise_for_status()
 
         return response.json()
+
+    def get_assets(
+        self,
+        release
+    ):
+
+        url = release.get(
+            "assets_url",
+            ""
+        )
+
+        if not url:
+            raise Exception(
+                "GitHub не вернул assets_url"
+            )
+
+        response = requests.get(
+            url,
+            headers=self.headers,
+            timeout=30
+        )
+
+        response.raise_for_status()
+
+        return response.json()
+
+
 
     def upload_file(
         self,

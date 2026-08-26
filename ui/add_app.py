@@ -1,5 +1,5 @@
 import os
-from datetime import date
+from datetime import datetime, timezone
 import customtkinter as ctk
 from tkinter import filedialog
 
@@ -7,7 +7,11 @@ from core.ipa_reader import read_ipa
 from core.icon_extractor import extract_icon
 from core.app_database import add_app
 from core.github_release import GitHubRelease
-from core.settings import get_github_settings
+from core.plist_generator import write_plist
+from core.settings import (
+    get_github_settings,
+    APP_CATEGORIES
+)
 
 
 class AddApp(ctk.CTkFrame):
@@ -188,6 +192,15 @@ class AddApp(ctk.CTkFrame):
             "Краткое описание приложения"
         )
 
+        self.category_field = self.create_combo_field(
+            "Категория",
+            APP_CATEGORIES
+        )
+
+        self.category_field.set(
+            "Приложения"
+        )
+
         self.description = self.create_text_field(
             "Описание",
             "Полное описание приложения"
@@ -289,6 +302,48 @@ class AddApp(ctk.CTkFrame):
 
         return field
 
+
+    def create_combo_field(
+        self,
+        title,
+        values
+    ):
+
+        container = ctk.CTkFrame(
+            self.form,
+            fg_color="transparent"
+        )
+
+        container.pack(
+            fill="x",
+            padx=10,
+            pady=7
+        )
+
+        label = ctk.CTkLabel(
+            container,
+            text=title,
+            font=("Arial", 13, "bold")
+        )
+
+        label.pack(
+            anchor="w",
+            pady=(0, 4)
+        )
+
+        combo = ctk.CTkComboBox(
+            container,
+            values=values,
+            height=38
+        )
+
+        combo.pack(
+            fill="x"
+        )
+
+        return combo
+
+
     # ==================================================
     # SELECT IPA
     # ==================================================
@@ -317,6 +372,21 @@ class AddApp(ctk.CTkFrame):
                 file,
                 self.ipa_data["bundle_id"]
             )
+
+            # Иконка обязательна: файл должен существовать и не быть пустым
+            if (
+                not self.icon_path
+                or not os.path.isfile(self.icon_path)
+                or os.path.getsize(self.icon_path) <= 0
+            ):
+                self.ipa_data = None
+                self.ipa_file = None
+                self.icon_path = None
+                raise Exception(
+                    "Не удалось извлечь иконку из IPA.\n"
+                    "Публикация без иконки запрещена.\n"
+                    "Попробуй другой IPA или проверь, что в архиве есть PNG."
+                )
 
             name = self.ipa_data.get(
                 "name",
@@ -432,6 +502,18 @@ class AddApp(ctk.CTkFrame):
             )
             return
 
+        if (
+            not self.icon_path
+            or not os.path.isfile(self.icon_path)
+            or os.path.getsize(self.icon_path) <= 0
+        ):
+            self.show_error(
+                "Иконка не извлечена из IPA.\n"
+                "Публикация отменена.\n"
+                "Выбери IPA заново — без иконки нельзя публиковать."
+            )
+            return
+
         self.add_button.configure(
             text="⏳  Загрузка IPA...",
             state="disabled"
@@ -532,13 +614,48 @@ class AddApp(ctk.CTkFrame):
 
             self.update()
 
-            asset = github.upload_file(
-                release,
-                self.ipa_file
+            assets = github.get_assets(
+                release
             )
+
+            asset = None
+
+
+            for item in assets:
+
+                if item.get(
+                    "name",
+                    ""
+                ).lower().endswith(
+                    ".ipa"
+                ):
+
+                    asset = item
+                    break
+
+
+            if asset:
+
+                print(
+                    "Используем существующий IPA asset:",
+                    asset["name"]
+                )
+
+            else:
+
+                asset = github.upload_file(
+                    release,
+                    self.ipa_file
+                )
+
 
             download_url = github.get_download_url(
                 asset
+            )
+
+            size = self.ipa_data.get(
+                "size",
+                0
             )
 
             self.info.insert(
@@ -553,6 +670,28 @@ class AddApp(ctk.CTkFrame):
             )
 
             self.update()
+
+            # --- генерация plist с размером ---
+            self.info.insert(
+                "end",
+                "Создание appPlist...\n"
+            )
+            self.update()
+
+            app_plist = write_plist(
+                name=name,
+                bundle_id=bundle_id,
+                version=version,
+                download_url=download_url,
+                size=size,
+            )
+
+            self.info.insert(
+                "end",
+                f"✓ Plist: {app_plist}\n\n"
+            )
+            self.update()
+            # --- конец генерации plist ---
 
             description = self.description.get(
                 "1.0",
@@ -570,6 +709,9 @@ class AddApp(ctk.CTkFrame):
                 "developerName":
                 self.developer.get().strip(),
 
+                "category":
+                self.category_field.get(),
+
                 "subtitle":
                 self.subtitle_field.get().strip(),
 
@@ -586,16 +728,16 @@ class AddApp(ctk.CTkFrame):
                         version,
 
                         "date":
-                        date.today().isoformat(),
+                        datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
 
                         "downloadURL":
                         download_url,
 
                         "size":
-                        self.ipa_data.get(
-                            "size",
-                            0
-                        )
+                        size,
+
+                        "appPlist":
+                        app_plist,
                     }
                 ]
             }
@@ -615,6 +757,11 @@ class AddApp(ctk.CTkFrame):
             )
 
         except Exception as error:
+
+            print(
+                "SAVE ERROR:",
+                repr(error)
+            )
 
             self.info.insert(
                 "end",

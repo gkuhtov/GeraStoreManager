@@ -114,11 +114,17 @@ def add_app(app):
 
     if existing is None:
 
+        now = get_now()
+
         if not app.get(
             "addedDate"
         ):
 
-            app["addedDate"] = get_now()
+            app["addedDate"] = now
+
+
+        app["appUpdateTime"] = now
+
 
         existing_apps.append(
             app
@@ -141,6 +147,43 @@ def add_app(app):
         ):
 
             app["addedDate"] = get_now()
+
+        old_version = existing.get(
+            "version",
+            ""
+        )
+
+        new_version = app.get(
+            "version",
+            ""
+        )
+
+
+        old_url = existing.get(
+            "downloadURL",
+            ""
+        )
+
+        new_url = app.get(
+            "downloadURL",
+            ""
+        )
+
+
+        if (
+            old_version != new_version
+            or old_url != new_url
+        ):
+
+            app["appUpdateTime"] = get_now()
+
+        else:
+
+            app["appUpdateTime"] = existing.get(
+                "appUpdateTime",
+                get_now()
+            )
+
 
         # Заменяем старую запись
         # актуальными данными.

@@ -6,7 +6,7 @@ from core.app_database import load_apps
 
 
 TEST_REPO = os.path.expanduser(
-    "~/GeraStore-Test/repo.json"
+    "~/Projects/GeraStore-Test/repo.json"
 )
 
 

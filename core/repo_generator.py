@@ -1,5 +1,4 @@
 import json
-from datetime import date
 
 
 def create_repo(data, extra):
@@ -14,7 +13,7 @@ def create_repo(data, extra):
         "versions": [
             {
                 "version": data["version"],
-                "date": str(date.today()),
+                "date": data.get("date", ""),
                 "downloadURL": extra["download_url"],
                 "size": data["size"]
             }

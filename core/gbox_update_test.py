@@ -6,11 +6,11 @@ from datetime import datetime, timezone
 MANAGER_APPS = "data/apps.json"
 
 OLD_REPO = os.path.expanduser(
-    "~/GeraStore/repo.json"
+    "~/Projects/GeraStore/repo.json"
 )
 
 TEST_REPO = os.path.expanduser(
-    "~/GeraStore-Test/repo.json"
+    "~/Projects/GeraStore-Test/repo.json"
 )
 
 

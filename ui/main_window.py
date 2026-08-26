@@ -1,7 +1,9 @@
 import customtkinter as ctk
+from datetime import datetime
 
 from ui.app_list import AppList
 from ui.add_app import AddApp
+from core.app_database import load_apps
 
 
 class MainWindow(ctk.CTk):
@@ -305,6 +307,89 @@ class MainWindow(ctk.CTk):
             )
 
     # ==================================================
+    # DASHBOARD DATA
+    # ==================================================
+
+    def get_dashboard_stats(self):
+        """Читает data/apps.json и считает статистику."""
+
+        try:
+            data = load_apps()
+            apps = data.get("apps") or []
+        except Exception:
+            apps = []
+
+        app_count = len(apps)
+        version_count = 0
+        last_update = None
+
+        for app in apps:
+            versions = app.get("versions") or []
+            version_count += max(len(versions), 1)
+
+            for key in ("appUpdateTime", "addedDate"):
+                raw = app.get(key)
+                if not raw:
+                    continue
+                try:
+                    value = str(raw).replace("Z", "+00:00")
+                    dt = datetime.fromisoformat(value)
+                    if last_update is None or dt > last_update:
+                        last_update = dt
+                except Exception:
+                    pass
+
+        if last_update is None:
+            status = "Пусто"
+        else:
+            status = last_update.strftime("%d.%m.%Y")
+
+        # Сортируем приложения по дате обновления (новые сверху)
+        def sort_key(app):
+            raw = app.get("appUpdateTime") or app.get("addedDate") or ""
+            try:
+                return datetime.fromisoformat(
+                    str(raw).replace("Z", "+00:00")
+                )
+            except Exception:
+                return datetime.min
+
+        recent = sorted(apps, key=sort_key, reverse=True)[:6]
+
+        return {
+            "app_count": app_count,
+            "version_count": version_count,
+            "status": status,
+            "recent": recent,
+        }
+
+    def format_size(self, size):
+        try:
+            size = int(size)
+        except Exception:
+            return "—"
+
+        if size <= 0:
+            return "—"
+
+        mb = size / (1024 * 1024)
+        if mb >= 100:
+            return f"{mb:.0f} MB"
+        return f"{mb:.1f} MB"
+
+    def get_app_version(self, app):
+        versions = app.get("versions") or []
+        if versions:
+            return versions[-1].get("version") or app.get("version") or "—"
+        return app.get("version") or "—"
+
+    def get_app_size(self, app):
+        versions = app.get("versions") or []
+        if versions:
+            return versions[-1].get("size") or app.get("size") or 0
+        return app.get("size") or 0
+
+    # ==================================================
     # DASHBOARD
     # ==================================================
 
@@ -329,13 +414,13 @@ class MainWindow(ctk.CTk):
             pady=8
         )
 
-        self.create_stat_cards()
+        stats = self.get_dashboard_stats()
 
+        self.create_stat_cards(stats)
         self.create_quick_actions()
+        self.create_recent_section(stats)
 
-        self.create_recent_section()
-
-    def create_stat_cards(self):
+    def create_stat_cards(self, stats):
 
         cards = ctk.CTkFrame(
             self.current_page,
@@ -348,18 +433,14 @@ class MainWindow(ctk.CTk):
         )
 
         for column in range(3):
-
-            cards.grid_columnconfigure(
-                column,
-                weight=1
-            )
+            cards.grid_columnconfigure(column, weight=1)
 
         self.create_stat_card(
             cards,
             0,
             "📦",
             "Приложения",
-            "0"
+            str(stats["app_count"])
         )
 
         self.create_stat_card(
@@ -367,15 +448,15 @@ class MainWindow(ctk.CTk):
             1,
             "🚀",
             "Версии",
-            "0"
+            str(stats["version_count"])
         )
 
         self.create_stat_card(
             cards,
             2,
-            "☁",
-            "Статус",
-            "Локальный"
+            "🕒",
+            "Обновлено",
+            stats["status"]
         )
 
     def create_stat_card(
@@ -402,10 +483,7 @@ class MainWindow(ctk.CTk):
         icon_label = ctk.CTkLabel(
             card,
             text=icon,
-            font=(
-                "Arial",
-                23
-            )
+            font=("Arial", 23)
         )
 
         icon_label.pack(
@@ -417,11 +495,7 @@ class MainWindow(ctk.CTk):
         value_label = ctk.CTkLabel(
             card,
             text=value,
-            font=(
-                "Arial",
-                22,
-                "bold"
-            )
+            font=("Arial", 22, "bold")
         )
 
         value_label.pack(
@@ -460,11 +534,7 @@ class MainWindow(ctk.CTk):
         title = ctk.CTkLabel(
             section,
             text="Быстрые действия",
-            font=(
-                "Arial",
-                18,
-                "bold"
-            )
+            font=("Arial", 18, "bold")
         )
 
         title.pack(
@@ -477,9 +547,7 @@ class MainWindow(ctk.CTk):
             fg_color="transparent"
         )
 
-        buttons.pack(
-            fill="x"
-        )
+        buttons.pack(fill="x")
 
         add_button = ctk.CTkButton(
             buttons,
@@ -500,15 +568,13 @@ class MainWindow(ctk.CTk):
             command=self.show_apps
         )
 
-        apps_button.pack(
-            side="left"
-        )
+        apps_button.pack(side="left")
 
     # ==================================================
     # RECENT
     # ==================================================
 
-    def create_recent_section(self):
+    def create_recent_section(self, stats):
 
         section = ctk.CTkFrame(
             self.current_page,
@@ -524,27 +590,95 @@ class MainWindow(ctk.CTk):
         title = ctk.CTkLabel(
             section,
             text="Последние приложения",
-            font=(
-                "Arial",
-                18,
-                "bold"
-            )
+            font=("Arial", 18, "bold")
         )
 
         title.pack(
             anchor="w",
             padx=20,
-            pady=(15, 4)
+            pady=(15, 8)
         )
 
-        info = ctk.CTkLabel(
+        recent = stats.get("recent") or []
+
+        if not recent:
+            info = ctk.CTkLabel(
+                section,
+                text="Пока приложений нет",
+                text_color="gray"
+            )
+            info.pack(pady=25)
+            return
+
+        list_frame = ctk.CTkFrame(
             section,
-            text="Пока приложений нет",
-            text_color="gray"
+            fg_color="transparent"
+        )
+        list_frame.pack(
+            fill="both",
+            expand=True,
+            padx=12,
+            pady=(0, 12)
         )
 
-        info.pack(
-            pady=25
+        for app in recent:
+            self.create_recent_row(list_frame, app)
+
+    def create_recent_row(self, parent, app):
+
+        row = ctk.CTkFrame(
+            parent,
+            corner_radius=10,
+            fg_color=("gray90", "gray17")
+        )
+        row.pack(
+            fill="x",
+            pady=4,
+            padx=4
+        )
+
+        name = app.get("name") or "Без названия"
+        version = self.get_app_version(app)
+        category = app.get("category") or "—"
+        size_text = self.format_size(self.get_app_size(app))
+
+        left = ctk.CTkFrame(row, fg_color="transparent")
+        left.pack(
+            side="left",
+            fill="x",
+            expand=True,
+            padx=14,
+            pady=10
+        )
+
+        name_label = ctk.CTkLabel(
+            left,
+            text=name,
+            font=("Arial", 14, "bold"),
+            anchor="w"
+        )
+        name_label.pack(anchor="w")
+
+        meta_label = ctk.CTkLabel(
+            left,
+            text=f"v{version}  ·  {category}  ·  {size_text}",
+            font=("Arial", 12),
+            text_color="gray",
+            anchor="w"
+        )
+        meta_label.pack(anchor="w", pady=(2, 0))
+
+        open_btn = ctk.CTkButton(
+            row,
+            text="Открыть",
+            width=90,
+            height=32,
+            command=self.show_apps
+        )
+        open_btn.pack(
+            side="right",
+            padx=12,
+            pady=10
         )
 
     # ==================================================

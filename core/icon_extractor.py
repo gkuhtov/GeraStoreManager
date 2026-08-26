@@ -6,7 +6,7 @@ from core.cgbi import convert_cgbi
 
 
 GERASTORE_ICONS = os.path.expanduser(
-    "~/GeraStore/icons"
+    "~/Projects/GeraStore/icons"
 )
 
 
