@@ -1,22 +1,21 @@
 import os
 from datetime import datetime, timezone
+
 import customtkinter as ctk
 from tkinter import filedialog
 
 from core.ipa_reader import read_ipa
 from core.icon_extractor import extract_icon
 from core.app_database import add_app
-from core.github_release import GitHubRelease
 from core.plist_generator import write_plist
-from core.settings import (
-    get_github_settings,
-    APP_CATEGORIES
-)
+from core.github_release import GitHubRelease
+from core.settings import APP_CATEGORIES, get_github_settings
 
 
 class AddApp(ctk.CTkFrame):
 
     def __init__(self, parent):
+
         super().__init__(
             parent,
             fg_color="transparent"
@@ -182,6 +181,10 @@ class AddApp(ctk.CTkFrame):
             pady=(0, 12)
         )
 
+        # ==================================================
+        # OTHER FIELDS
+        # ==================================================
+
         self.developer = self.create_field(
             "Разработчик",
             "Например: Alfa-Bank"
@@ -302,7 +305,6 @@ class AddApp(ctk.CTkFrame):
 
         return field
 
-
     def create_combo_field(
         self,
         title,
@@ -343,7 +345,6 @@ class AddApp(ctk.CTkFrame):
 
         return combo
 
-
     # ==================================================
     # SELECT IPA
     # ==================================================
@@ -368,25 +369,94 @@ class AddApp(ctk.CTkFrame):
                 file
             )
 
-            self.icon_path = extract_icon(
-                file,
-                self.ipa_data["bundle_id"]
+            print("========================================")
+            print("IPA DEBUG")
+            print("IPA:", file)
+            print(
+                "BUNDLE ID:",
+                self.ipa_data.get("bundle_id")
             )
+            print(
+                "NAME:",
+                self.ipa_data.get("name")
+            )
+            print(
+                "VERSION:",
+                self.ipa_data.get("version")
+            )
+            print(
+                "SIZE:",
+                self.ipa_data.get("size")
+            )
+            print("========================================")
 
-            # Иконка обязательна: файл должен существовать и не быть пустым
-            if (
-                not self.icon_path
-                or not os.path.isfile(self.icon_path)
-                or os.path.getsize(self.icon_path) <= 0
-            ):
+            # ==================================================
+            # ICON
+            # ==================================================
+
+            try:
+
+                self.icon_path = extract_icon(
+                    file,
+                    self.ipa_data["bundle_id"]
+                )
+
+                print(
+                    "ICON RESULT:",
+                    self.icon_path
+                )
+
+                print(
+                    "ICON EXISTS:",
+                    os.path.isfile(self.icon_path)
+                    if self.icon_path
+                    else False
+                )
+
+                if (
+                    self.icon_path
+                    and os.path.isfile(self.icon_path)
+                ):
+
+                    print(
+                        "ICON SIZE:",
+                        os.path.getsize(
+                            self.icon_path
+                        )
+                    )
+
+            except Exception as icon_error:
+
+                import traceback
+
+                print("========================================")
+                print("ICON EXTRACTION ERROR")
+                print(
+                    type(icon_error).__name__,
+                    ":",
+                    icon_error
+                )
+                traceback.print_exc()
+                print("========================================")
+
+                raise
+
+            if not self.icon_path:
+
                 self.ipa_data = None
                 self.ipa_file = None
                 self.icon_path = None
+
                 raise Exception(
                     "Не удалось извлечь иконку из IPA.\n"
                     "Публикация без иконки запрещена.\n"
-                    "Попробуй другой IPA или проверь, что в архиве есть PNG."
+                    "Попробуй другой IPA или проверь, "
+                    "что в архиве есть PNG."
                 )
+
+            # ==================================================
+            # NAME
+            # ==================================================
 
             name = self.ipa_data.get(
                 "name",
@@ -400,6 +470,10 @@ class AddApp(ctk.CTkFrame):
                 text=name
             )
 
+            # ==================================================
+            # VERSION
+            # ==================================================
+
             version = self.ipa_data.get(
                 "version",
                 ""
@@ -411,6 +485,10 @@ class AddApp(ctk.CTkFrame):
             self.version_preview.configure(
                 text=f"Версия: {version}"
             )
+
+            # ==================================================
+            # BUNDLE ID
+            # ==================================================
 
             bundle_id = self.ipa_data.get(
                 "bundle_id",
@@ -424,12 +502,17 @@ class AddApp(ctk.CTkFrame):
                 text=f"Bundle ID: {bundle_id}"
             )
 
+            # ==================================================
+            # DEVELOPER
+            # ==================================================
+
             developer = self.ipa_data.get(
                 "developer",
                 ""
             )
 
             if developer:
+
                 self.developer.delete(
                     0,
                     "end"
@@ -444,6 +527,10 @@ class AddApp(ctk.CTkFrame):
                     text=developer
                 )
 
+            # ==================================================
+            # SIZE
+            # ==================================================
+
             size = self.ipa_data.get(
                 "size",
                 0
@@ -453,6 +540,10 @@ class AddApp(ctk.CTkFrame):
                 size / 1024 / 1024,
                 2
             )
+
+            # ==================================================
+            # INFO
+            # ==================================================
 
             self.info.delete(
                 "1.0",
@@ -464,8 +555,8 @@ class AddApp(ctk.CTkFrame):
                 f"IPA выбран.\n\n"
                 f"Размер: {size_mb} MB\n"
                 f"Иконка: {self.icon_path}\n\n"
-                f"После заполнения данных нажмите "
-                f"«Добавить приложение»."
+                f"Теперь вставь ссылку на скачивание IPA "
+                f"в поле выше и заполни остальные данные."
             )
 
             self.select_button.configure(
@@ -473,6 +564,11 @@ class AddApp(ctk.CTkFrame):
             )
 
         except Exception as error:
+
+            print(
+                "SELECT IPA ERROR:",
+                repr(error)
+            )
 
             self.info.delete(
                 "1.0",
@@ -488,34 +584,173 @@ class AddApp(ctk.CTkFrame):
     # SAVE
     # ==================================================
 
+
+    def make_release_tag(self):
+
+        bundle = self.ipa_data.get(
+            "bundle_id",
+            "app"
+        )
+
+        version = self.ipa_data.get(
+            "version",
+            "unknown"
+        )
+
+        safe_bundle = "".join(
+            char
+            if char.isalnum() or char in ".-_"
+            else "-"
+            for char in bundle
+        )
+
+        safe_version = "".join(
+            char
+            if char.isalnum() or char in ".-_"
+            else "-"
+            for char in version
+        )
+
+        return (
+            f"gerastore-"
+            f"{safe_bundle}-"
+            f"{safe_version}"
+        )
+
+
+    def make_asset_name(self):
+
+        name = self.ipa_data.get(
+            "name",
+            "app"
+        )
+
+        version = self.ipa_data.get(
+            "version",
+            "unknown"
+        )
+
+        safe_name = "".join(
+            char
+            if char.isalnum() or char in " .-_"
+            else "_"
+            for char in name
+        ).strip()
+
+        safe_name = safe_name.replace(
+            " ",
+            "_"
+        )
+
+        safe_version = "".join(
+            char
+            if char.isalnum() or char in ".-_"
+            else "-"
+            for char in version
+        )
+
+        return (
+            f"{safe_name}_"
+            f"{safe_version}.ipa"
+        )
+
+
+    def upload_to_github(self):
+
+        settings = get_github_settings()
+
+        if not settings.get("token"):
+            raise Exception(
+                "GitHub Token не указан в settings.json"
+            )
+
+        github = GitHubRelease(
+            settings["owner"],
+            settings["repo"],
+            settings["token"]
+        )
+
+        tag = self.make_release_tag()
+
+        name = self.ipa_data.get(
+            "name",
+            "GeraStore App"
+        )
+
+        version = self.ipa_data.get(
+            "version",
+            ""
+        )
+
+        release_name = name
+
+        if version:
+            release_name += (
+                f" {version}"
+            )
+
+        description = (
+            self.subtitle_field.get().strip()
+        )
+
+        release = github.create_release(
+            tag=tag,
+            name=release_name,
+            description=description
+        )
+
+        asset_name = self.make_asset_name()
+
+        asset = github.upload_file(
+            release,
+            self.ipa_file
+        )
+
+        download_url = github.get_download_url(
+            asset
+        )
+
+        return (
+            release,
+            asset,
+            download_url
+        )
+
+
     def save(self):
 
         if not self.ipa_data:
+
             self.show_error(
                 "Сначала выберите IPA."
             )
+
             return
 
         if not self.ipa_file:
+
             self.show_error(
                 "Файл IPA не выбран."
             )
+
             return
 
-        if (
-            not self.icon_path
-            or not os.path.isfile(self.icon_path)
-            or os.path.getsize(self.icon_path) <= 0
-        ):
+        if not self.icon_path:
+
             self.show_error(
-                "Иконка не извлечена из IPA.\n"
-                "Публикация отменена.\n"
-                "Выбери IPA заново — без иконки нельзя публиковать."
+                "Иконка не извлечена из IPA.\\n"
+                "Публикация отменена.\\n"
+                "Выбери IPA заново."
             )
+
             return
+
+        # ==================================================
+        # DISABLE UI
+        # ==================================================
 
         self.add_button.configure(
-            text="⏳  Загрузка IPA...",
+            text="⏳  Добавление приложения...",
             state="disabled"
         )
 
@@ -530,20 +765,16 @@ class AddApp(ctk.CTkFrame):
 
         self.info.insert(
             "end",
-            "Создание GitHub Release...\n"
+            "Проверка данных приложения...\\n\\n"
         )
 
         self.update()
 
         try:
 
-            settings = get_github_settings()
-
-            github = GitHubRelease(
-                settings["owner"],
-                settings["repo"],
-                settings["token"]
-            )
+            # ==================================================
+            # BASIC DATA
+            # ==================================================
 
             name = self.ipa_data.get(
                 "name",
@@ -560,122 +791,57 @@ class AddApp(ctk.CTkFrame):
                 "app"
             )
 
-            safe_bundle = (
-                bundle_id
-                .replace(
-                    " ",
-                    "-"
-                )
-                .replace(
-                    "/",
-                    "-"
-                )
-            )
-
-            safe_version = (
-                version
-                .replace(
-                    " ",
-                    "-"
-                )
-                .replace(
-                    "/",
-                    "-"
-                )
-            )
-
-            tag = (
-                f"gerastore-"
-                f"{safe_bundle}-"
-                f"{safe_version}"
-            )
-
-            release = github.create_release(
-                tag=tag,
-                name=f"{name} {version}",
-                description=(
-                    f"{name}\n\n"
-                    f"Bundle ID: {bundle_id}\n"
-                    f"Version: {version}"
-                )
-            )
-
-            self.info.insert(
-                "end",
-                "✓ Release создан.\n"
-            )
-
-            self.update()
-
-            self.info.insert(
-                "end",
-                "Загрузка IPA в Release...\n"
-            )
-
-            self.update()
-
-            assets = github.get_assets(
-                release
-            )
-
-            asset = None
-
-
-            for item in assets:
-
-                if item.get(
-                    "name",
-                    ""
-                ).lower().endswith(
-                    ".ipa"
-                ):
-
-                    asset = item
-                    break
-
-
-            if asset:
-
-                print(
-                    "Используем существующий IPA asset:",
-                    asset["name"]
-                )
-
-            else:
-
-                asset = github.upload_file(
-                    release,
-                    self.ipa_file
-                )
-
-
-            download_url = github.get_download_url(
-                asset
-            )
-
             size = self.ipa_data.get(
                 "size",
                 0
             )
 
-            self.info.insert(
-                "end",
-                "✓ IPA загружен.\n\n"
-            )
+            # ==================================================
+            # GITHUB RELEASE
+            # ==================================================
 
             self.info.insert(
                 "end",
-                f"Download URL:\n"
-                f"{download_url}\n\n"
+                "Подготовка GitHub Release...\\n"
             )
 
             self.update()
 
-            # --- генерация plist с размером ---
+            release, asset, download_url = (
+                self.upload_to_github()
+            )
+
             self.info.insert(
                 "end",
-                "Создание appPlist...\n"
+                "✓ GitHub Release создан/найден.\\n"
             )
+
+            self.info.insert(
+                "end",
+                f"✓ IPA загружен: {asset.get('name', '')}\\n"
+            )
+
+            self.info.insert(
+                "end",
+                "✓ Download URL получен.\\n\\n"
+            )
+
+            self.info.insert(
+                "end",
+                f"{download_url}\\n\\n"
+            )
+
+            self.update()
+
+            # ==================================================
+            # APP PLIST
+            # ==================================================
+
+            self.info.insert(
+                "end",
+                "Создание appPlist...\\n"
+            )
+
             self.update()
 
             app_plist = write_plist(
@@ -683,20 +849,28 @@ class AddApp(ctk.CTkFrame):
                 bundle_id=bundle_id,
                 version=version,
                 download_url=download_url,
-                size=size,
+                size=size
             )
 
             self.info.insert(
                 "end",
-                f"✓ Plist: {app_plist}\n\n"
+                f"✓ Plist: {app_plist}\\n\\n"
             )
+
             self.update()
-            # --- конец генерации plist ---
+
+            # ==================================================
+            # DESCRIPTION
+            # ==================================================
 
             description = self.description.get(
                 "1.0",
                 "end"
             ).strip()
+
+            # ==================================================
+            # CREATE APP OBJECT
+            # ==================================================
 
             app = {
 
@@ -724,11 +898,16 @@ class AddApp(ctk.CTkFrame):
                 "versions":
                 [
                     {
+
                         "version":
                         version,
 
                         "date":
-                        datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
+                        datetime.now(
+                            timezone.utc
+                        ).strftime(
+                            "%Y-%m-%dT%H:%M:%SZ"
+                        ),
 
                         "downloadURL":
                         download_url,
@@ -737,10 +916,22 @@ class AddApp(ctk.CTkFrame):
                         size,
 
                         "appPlist":
-                        app_plist,
+                        app_plist
+
                     }
                 ]
             }
+
+            # ==================================================
+            # SAVE TO DATABASE
+            # ==================================================
+
+            self.info.insert(
+                "end",
+                "Сохранение приложения...\\n"
+            )
+
+            self.update()
 
             add_app(
                 app
@@ -749,7 +940,39 @@ class AddApp(ctk.CTkFrame):
             self.info.insert(
                 "end",
                 "✓ Приложение добавлено "
-                "в GeraStore Manager."
+                "в GeraStore Manager.\\n\\n"
+            )
+
+            self.info.insert(
+                "end",
+                "GitHub Release:\\n"
+            )
+
+            self.info.insert(
+                "end",
+                f"{release.get('html_url', '')}\\n\\n"
+            )
+
+            self.info.insert(
+                "end",
+                "Download URL:\\n"
+            )
+
+            self.info.insert(
+                "end",
+                f"{download_url}\\n\\n"
+            )
+
+            self.info.insert(
+                "end",
+                f"Размер IPA: "
+                f"{round(size / 1024 / 1024, 2)} MB\\n\\n"
+            )
+
+            self.info.insert(
+                "end",
+                "✓ IPA автоматически загружен "
+                "в GitHub Release."
             )
 
             self.add_button.configure(
@@ -765,7 +988,7 @@ class AddApp(ctk.CTkFrame):
 
             self.info.insert(
                 "end",
-                "\n\nОШИБКА:\n"
+                "\\n\\nОШИБКА:\\n"
                 f"{error}"
             )
 
@@ -779,9 +1002,9 @@ class AddApp(ctk.CTkFrame):
                 state="normal"
             )
 
-    # ==================================================
-    # ERROR
-    # ==================================================
+            self.add_button.configure(
+                state="normal"
+            )
 
     def show_error(
         self,
@@ -796,4 +1019,13 @@ class AddApp(ctk.CTkFrame):
         self.info.insert(
             "end",
             f"Ошибка:\n\n{message}"
+        )
+
+        self.add_button.configure(
+            text="✓  Добавить приложение",
+            state="normal"
+        )
+
+        self.select_button.configure(
+            state="normal"
         )

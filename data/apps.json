@@ -100,6 +100,66 @@
       ],
       "addedDate": "2026-08-10T13:17:04.892517Z",
       "appUpdateTime": "2026-08-10T13:17:04.892517Z"
+    },
+    {
+      "name": "Persona",
+      "bundleIdentifier": "com.tickettothemoon.video.persona",
+      "developerName": "ГЕРЫЧ",
+      "category": "Фото и видео",
+      "subtitle": "",
+      "localizedDescription": "⚙️Особенности PRO⚙️\n\n🩷Разблокированы платные функции.\n🩷Профессиональные инструменты редактирования.\n🩷Фильтры и эффекты.\n\n📸 Persona Pro позволяет редактировать фотографии, применять эффекты и использовать расширенные инструменты обработки изображений прямо на iPhone.",
+      "iconURL": "https://gkuhtov.github.io/GeraStore/icons/com.tickettothemoon.video.persona.png",
+      "versions": [
+        {
+          "version": "1.15.38",
+          "date": "2026-08-28T16:49:31Z",
+          "downloadURL": "https://github.com/gkuhtov/GeraStore/releases/download/gerastore-com.tickettothemoon.video.persona-1.15.38/Persona_GeraKStore.ipa",
+          "size": 174804509,
+          "appPlist": "https://gkuhtov.github.io/GeraStore/plist/com.tickettothemoon.video.persona.plist"
+        }
+      ],
+      "addedDate": "2026-08-28T16:49:31.629239Z",
+      "appUpdateTime": "2026-08-28T16:49:31.629239Z"
+    },
+    {
+      "name": "GeraKMusic",
+      "bundleIdentifier": "com.gerakmusic.app",
+      "developerName": "ГЕРЫЧ",
+      "category": "Музыка",
+      "subtitle": "",
+      "localizedDescription": "ЭКЗ",
+      "iconURL": "https://gkuhtov.github.io/GeraStore/icons/com.gerakmusic.app.png",
+      "versions": [
+        {
+          "version": "777",
+          "date": "2026-08-29T05:34:41Z",
+          "downloadURL": "https://github.com/gkuhtov/GeraStore/releases/download/gerastore-com.gerakmusic.app-777/GeraKMusic.ipa",
+          "size": 5046195,
+          "appPlist": "https://gkuhtov.github.io/GeraStore/plist/com.gerakmusic.app.plist"
+        }
+      ],
+      "addedDate": "2026-08-29T05:34:41.138693Z",
+      "appUpdateTime": "2026-08-29T05:34:41.138693Z"
+    },
+    {
+      "name": "GeraKMusic",
+      "bundleIdentifier": "com.gerak.music.client",
+      "developerName": "",
+      "category": "Приложения",
+      "subtitle": "",
+      "localizedDescription": "TEST",
+      "iconURL": "https://gkuhtov.github.io/GeraStore/icons/com.gerak.music.client.png",
+      "versions": [
+        {
+          "version": "GeraK",
+          "date": "2026-09-01T18:01:36Z",
+          "downloadURL": "https://github.com/gkuhtov/GeraStore/releases/download/gerastore-com.gerak.music.client-GeraK/GeraKMusic_v5.ipa",
+          "size": 4805994,
+          "appPlist": "https://gkuhtov.github.io/GeraStore/plist/com.gerak.music.client.plist"
+        }
+      ],
+      "addedDate": "2026-09-01T18:01:36.174128Z",
+      "appUpdateTime": "2026-09-01T18:01:36.174128Z"
     }
   ]
 }

@@ -85,6 +85,19 @@ def save_apps(data):
         print(error)
 
 
+def get_latest_version(app):
+
+    versions = app.get(
+        "versions",
+        []
+    )
+
+    if not versions:
+        return {}
+
+    return versions[-1]
+
+
 def add_app(app):
 
     data = load_apps()
@@ -95,7 +108,8 @@ def add_app(app):
     )
 
     bundle_id = app.get(
-        "bundleIdentifier"
+        "bundleIdentifier",
+        ""
     )
 
     existing = None
@@ -103,14 +117,16 @@ def add_app(app):
     for item in existing_apps:
 
         if item.get(
-            "bundleIdentifier"
+            "bundleIdentifier",
+            ""
         ) == bundle_id:
 
             existing = item
             break
 
-    # Новое приложение.
-    # Сохраняем дату первого добавления.
+    # ==================================================
+    # NEW APP
+    # ==================================================
 
     if existing is None:
 
@@ -122,17 +138,21 @@ def add_app(app):
 
             app["addedDate"] = now
 
-
         app["appUpdateTime"] = now
-
 
         existing_apps.append(
             app
         )
 
+    # ==================================================
+    # EXISTING APP
+    # ==================================================
+
     else:
 
-        # Сохраняем старую дату добавления.
+        # --------------------------------------------------
+        # Сохраняем дату первого добавления.
+        # --------------------------------------------------
 
         if existing.get(
             "addedDate"
@@ -148,27 +168,46 @@ def add_app(app):
 
             app["addedDate"] = get_now()
 
-        old_version = existing.get(
+        # --------------------------------------------------
+        # Получаем последнюю старую версию.
+        # --------------------------------------------------
+
+        old_latest = get_latest_version(
+            existing
+        )
+
+        # --------------------------------------------------
+        # Получаем новую версию.
+        # --------------------------------------------------
+
+        new_latest = get_latest_version(
+            app
+        )
+
+        old_version = old_latest.get(
             "version",
             ""
         )
 
-        new_version = app.get(
+        new_version = new_latest.get(
             "version",
             ""
         )
 
-
-        old_url = existing.get(
+        old_url = old_latest.get(
             "downloadURL",
             ""
         )
 
-        new_url = app.get(
+        new_url = new_latest.get(
             "downloadURL",
             ""
         )
 
+        # --------------------------------------------------
+        # Если версия или ссылка изменились,
+        # обновляем appUpdateTime.
+        # --------------------------------------------------
 
         if (
             old_version != new_version
@@ -184,9 +223,9 @@ def add_app(app):
                 get_now()
             )
 
-
-        # Заменяем старую запись
-        # актуальными данными.
+        # --------------------------------------------------
+        # Полностью заменяем старую запись актуальной.
+        # --------------------------------------------------
 
         index = existing_apps.index(
             existing

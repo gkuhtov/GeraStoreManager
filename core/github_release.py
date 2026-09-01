@@ -49,8 +49,6 @@ class GitHubRelease:
 
         return response.json()
 
-
-
     def create_release(
         self,
         tag,
@@ -63,13 +61,13 @@ class GitHubRelease:
         )
 
         if existing:
+
             print(
                 "GitHub Release уже существует:",
                 tag
             )
 
             return existing
-
 
         url = f"{self.api_url}/releases"
 
@@ -92,6 +90,7 @@ class GitHubRelease:
         )
 
         if response.status_code >= 400:
+
             print("GITHUB ERROR:")
             print(response.text)
 
@@ -110,6 +109,7 @@ class GitHubRelease:
         )
 
         if not url:
+
             raise Exception(
                 "GitHub не вернул assets_url"
             )
@@ -124,7 +124,51 @@ class GitHubRelease:
 
         return response.json()
 
+    def delete_asset(
+        self,
+        asset
+    ):
 
+        asset_id = asset.get(
+            "id"
+        )
+
+        if not asset_id:
+
+            raise Exception(
+                "GitHub не вернул ID asset"
+            )
+
+        url = (
+            f"{self.api_url}/"
+            f"releases/assets/"
+            f"{asset_id}"
+        )
+
+        response = requests.delete(
+            url,
+            headers=self.headers,
+            timeout=30
+        )
+
+        if response.status_code != 204:
+
+            print(
+                "GITHUB DELETE ASSET ERROR:"
+            )
+
+            print(
+                response.text
+            )
+
+        response.raise_for_status()
+
+        print(
+            "GitHub asset удалён:",
+            asset.get("name")
+        )
+
+        return True
 
     def upload_file(
         self,
@@ -138,6 +182,7 @@ class GitHubRelease:
         )
 
         if not upload_url:
+
             raise Exception(
                 "GitHub не вернул upload_url"
             )
@@ -158,8 +203,32 @@ class GitHubRelease:
 
         headers = {
             **self.headers,
-            "Content-Type": "application/octet-stream"
+            "Content-Type":
+            "application/octet-stream"
         }
+
+        file_size = os.path.getsize(
+            file_path
+        )
+
+        print(
+            "Загрузка IPA в GitHub Release:"
+        )
+
+        print(
+            "  file:",
+            file_path
+        )
+
+        print(
+            "  name:",
+            file_name
+        )
+
+        print(
+            "  size:",
+            file_size
+        )
 
         with open(
             file_path,
@@ -170,7 +239,17 @@ class GitHubRelease:
                 url,
                 headers=headers,
                 data=file,
-                timeout=600
+                timeout=1800
+            )
+
+        if response.status_code >= 400:
+
+            print(
+                "GITHUB UPLOAD ERROR:"
+            )
+
+            print(
+                response.text
             )
 
         response.raise_for_status()
@@ -188,6 +267,7 @@ class GitHubRelease:
         )
 
         if not url:
+
             raise Exception(
                 "GitHub не вернул URL файла"
             )
