@@ -7,7 +7,7 @@
       "bundleIdentifier": "com.kluchapp.prod",
       "developerName": "GK",
       "subtitle": "🇷🇺 Обновлённое приложение Альфа Банка, добавленное в appstore под видом другого приложения \"Холдер\".",
-      "localizedDescription": "ℹ️ Особенности:\n▎Удалено из AppStore\n▎Версия за май 26",
+      "localizedDescription": "⚙️Особенности⚙️\n\n🩷Новое приложение, удалённое из ❌💙AppStore.\n🩷Бесконтактная оплата с iPhone через Bluetooth.\n🩷Новые функции и улучшения.\n\n💳 А-Ключ - новое приложение Альфа-Банка для iPhone с поддержкой бесконтактной оплаты.",
       "iconURL": "assets/icons/com.kluchapp.prod.png",
       "versions": [
         {
@@ -26,8 +26,8 @@
       "bundleIdentifier": "com.moonactive.cmboard",
       "developerName": "ГЕРЫЧ",
       "category": "Игры",
-      "subtitle": "САБ",
-      "localizedDescription": "Путешествие по красочным уровням, где Вас ждут загадки, испытания и новые открытия.",
+      "subtitle": "",
+      "localizedDescription": "⚙️Особенности⚙️\n\n🩷Собирайте монеты и развивайте деревни.\n🩷Атакуйте деревни соперников и совершайте набеги.\n🩷Собирайте карты и завершайте коллекции.\n\n🎲 Бросайте кубики, двигайтесь по игровому полю, развивайте свою деревню и открывайте новые миры.",
       "iconURL": "https://gkuhtov.github.io/GeraStore/icons/com.moonactive.cmboard.png",
       "versions": [
         {
@@ -42,32 +42,12 @@
       "appUpdateTime": "2026-08-04T13:41:36.880462Z"
     },
     {
-      "name": "Radarbot",
-      "bundleIdentifier": "com.iteration-mobile.radarbot-free-ww",
-      "developerName": "ГЕРЫЧ",
-      "category": "Навигация",
-      "subtitle": "САБ",
-      "localizedDescription": "Ваш помошник в дороге. Предупреждает о радарах, камерах и опасных участках дороги, помогая контролировать скорость.",
-      "iconURL": "https://gkuhtov.github.io/GeraStore/icons/com.iteration-mobile.radarbot-free-ww.png",
-      "versions": [
-        {
-          "version": "9.43",
-          "date": "2026-08-04",
-          "downloadURL": "https://github.com/gkuhtov/GeraStore/releases/download/gerastore-com.iteration-mobile.radarbot-free-ww-9.43/Radarbot.ipa",
-          "size": 148911591,
-          "appPlist": "https://gkuhtov.github.io/GeraStore/plist/com.iteration-mobile.radarbot-free-ww.plist"
-        }
-      ],
-      "addedDate": "2026-08-04T13:59:29.789890Z",
-      "appUpdateTime": "2026-08-04T13:59:29.789890Z"
-    },
-    {
-      "name": "Bridge Constr+",
+      "name": "Bridge Constructor+",
       "bundleIdentifier": "com.headupgames.bridgeconstructor-arcade",
       "developerName": "ГЕРЫЧ",
       "category": "Игры",
-      "subtitle": "САБ",
-      "localizedDescription": "Стройте мосты, проверйте свои инженерные навыки и создавайте надежные конструкции. Решайте говололомки с физикой и проходите десятки уровней.",
+      "subtitle": "",
+      "localizedDescription": "⚙️Особенности PLUS⚙️\n\n🩷Без рекламы.\n🩷40 уровней.\n🩷Дополнительные задания и материалы.\n\n🌉 Стройте мосты через долины, каналы и реки, выбирайте подходящие материалы и проверяйте конструкции под нагрузкой автомобилей и грузовиков.",
       "iconURL": "https://gkuhtov.github.io/GeraStore/icons/com.headupgames.bridgeconstructor-arcade.png",
       "versions": [
         {
@@ -82,12 +62,12 @@
       "appUpdateTime": "2026-08-06T13:00:26.692846Z"
     },
     {
-      "name": "RuTube ",
+      "name": "RuTube",
       "bundleIdentifier": "com.slicingdice.game",
       "developerName": "ГЕРЫЧ",
       "category": "Развлечения",
       "subtitle": "",
-      "localizedDescription": "⚡️Новейшая версия⚡️\n\n⚙️Особенности мода⚙️\n💚Недоступно в ❌💙AppStore.\n💚Удалена реклама.\n\n😰Новое приложение RuTube под видом игры. Активация приложения по ссылке удалено, приложение сразу работает в штатном режиме.",
+      "localizedDescription": "⚙️Особенности МОДА⚙️\n\n🩷Недоступно в ❌💙AppStore.\n🩷Удалена реклама.\n🩷Активация по ссылке удалена.\n\n🎬 Новое приложение RuTube под видом игры. Приложение сразу работает в штатном режиме без необходимости активации. Запускать без впн.",
       "iconURL": "https://gkuhtov.github.io/GeraStore/icons/com.slicingdice.game.png",
       "versions": [
         {
@@ -122,44 +102,61 @@
       "appUpdateTime": "2026-08-28T16:49:31.629239Z"
     },
     {
-      "name": "GeraKMusic",
-      "bundleIdentifier": "com.gerakmusic.app",
-      "developerName": "ГЕРЫЧ",
-      "category": "Музыка",
-      "subtitle": "",
-      "localizedDescription": "ЭКЗ",
-      "iconURL": "https://gkuhtov.github.io/GeraStore/icons/com.gerakmusic.app.png",
+      "name": "Online",
+      "bundleIdentifier": "com.inv.gen",
+      "developerName": "GK",
+      "category": "Финансы",
+      "subtitle": "Банковское приложение для управления счетами и переводов.",
+      "localizedDescription": "⚙️Особенности⚙️\n\n•Переводы и платежи.\n•Оплата услуг по QR-коду.\n\n🏦 СберБанк позволяет управлять картами и счетами, совершать переводы и оплачивать различные услуги прямо со смартфона.",
+      "iconURL": "assets/icons/com.inv.gen.png",
       "versions": [
         {
-          "version": "777",
-          "date": "2026-08-29T05:34:41Z",
-          "downloadURL": "https://github.com/gkuhtov/GeraStore/releases/download/gerastore-com.gerakmusic.app-777/GeraKMusic.ipa",
-          "size": 5046195,
-          "appPlist": "https://gkuhtov.github.io/GeraStore/plist/com.gerakmusic.app.plist"
+          "version": "17.6.1",
+          "date": "2026-09-02",
+          "downloadURL": "https://github.com/gkuhtov/GeraStore/releases/download/gerastore-com.inv.gen-17.6.1/Online.ipa",
+          "size": 296656711,
+          "appPlist": "https://gkuht.github.io/GeraStore/plist/com.inv.gen.plist"
         }
       ],
-      "addedDate": "2026-08-29T05:34:41.138693Z",
-      "appUpdateTime": "2026-08-29T05:34:41.138693Z"
+      "appUpdateTime": "2026-09-02T00:00:00Z"
     },
     {
-      "name": "GeraKMusic",
-      "bundleIdentifier": "com.gerak.music.client",
-      "developerName": "",
-      "category": "Приложения",
-      "subtitle": "",
-      "localizedDescription": "TEST",
-      "iconURL": "https://gkuhtov.github.io/GeraStore/icons/com.gerak.music.client.png",
+      "name": "Сириус",
+      "bundleIdentifier": "com.sm.FlowTime",
+      "developerName": "GK",
+      "category": "Финансы",
+      "subtitle": "Банковское приложение ВТБ для iPhone.",
+      "localizedDescription": "⚙️Особенности⚙️\n\n•Переводы по номеру телефона.\n•Оплата покупок и услуг.\n\n💳 ВТБ Онлайн позволяет совершать переводы, оплачивать покупки и услуги, управлять картами и контролировать расходы со смартфона.",
+      "iconURL": "assets/icons/com.sm.FlowTime.png",
       "versions": [
         {
-          "version": "GeraK",
-          "date": "2026-09-01T18:01:36Z",
-          "downloadURL": "https://github.com/gkuhtov/GeraStore/releases/download/gerastore-com.gerak.music.client-GeraK/GeraKMusic_v5.ipa",
-          "size": 4805994,
-          "appPlist": "https://gkuhtov.github.io/GeraStore/plist/com.gerak.music.client.plist"
+          "version": "2.0.1",
+          "date": "2026-09-02",
+          "downloadURL": "https://github.com/gkuhtov/GeraStore/releases/download/gerastore-com.sm.FlowTime-2.0.1/default.ipa",
+          "size": 379282059,
+          "appPlist": "https://gkuht.github.io/GeraStore/plist/com.sm.FlowTime.plist"
         }
       ],
-      "addedDate": "2026-09-01T18:01:36.174128Z",
-      "appUpdateTime": "2026-09-01T18:01:36.174128Z"
+      "appUpdateTime": "2026-09-02T00:00:00Z"
+    },
+    {
+      "name": "Radarbot",
+      "bundleIdentifier": "com.iteration-mobile.radarbot-free-ww",
+      "developerName": "GK",
+      "category": "Навигация",
+      "subtitle": "PRO-версия приложения для предупреждения о камерах и опасностях на дороге.",
+      "localizedDescription": "⚙️Особенности PRO⚙️\n\n•Без рекламы.\n•Работа в фоновом режиме.\n\n🚗 Radarbot предупреждает о камерах контроля и опасных участках дороги. Приложение работает в фоне и может использоваться вместе с навигатором.",
+      "iconURL": "assets/icons/com.iteration-mobile.radarbot-free-ww.png",
+      "versions": [
+        {
+          "version": "9.43",
+          "date": "2026-09-02",
+          "downloadURL": "https://github.com/gkuhtov/GeraStore/releases/download/radarbot-9.43/Radarbot.ipa",
+          "size": 148911591,
+          "appPlist": "https://gkuht.github.io/GeraStore/plist/com.iteration-mobile.radarbot-free-ww.plist"
+        }
+      ],
+      "appUpdateTime": "2026-09-02T00:00:00Z"
     }
   ]
 }
