@@ -55,35 +55,6 @@ def save_apps(data):
             ensure_ascii=False
         )
 
-    try:
-
-        from core.gerastore_sync import GeraStoreSync
-
-        print()
-        print("=" * 60)
-        print("GeraStore Manager: база сохранена")
-        print("=" * 60)
-        print("Запускаем синхронизацию с GitHub...")
-
-        sync = GeraStoreSync()
-
-        result = sync.sync(
-            commit_message="Auto update GeraStore"
-        )
-
-        print(
-            "Результат синхронизации:",
-            result
-        )
-
-    except Exception as error:
-
-        print()
-        print("=" * 60)
-        print("ОШИБКА АВТОПУБЛИКАЦИИ")
-        print("=" * 60)
-        print(error)
-
 
 def get_latest_version(app):
 

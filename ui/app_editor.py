@@ -1,7 +1,6 @@
 import customtkinter as ctk
 
 from core.app_database import load_apps, save_apps
-from core.gerastore_sync import GeraStoreSync
 
 
 class AppEditor(ctk.CTkToplevel):
@@ -532,28 +531,6 @@ class AppEditor(ctk.CTkToplevel):
         save_apps(
             data
         )
-
-
-        # Автоматическое обновление GeraStore
-
-        try:
-
-            sync = GeraStoreSync()
-
-            result = sync.sync(
-                commit_message=f"Update {name} from Manager"
-            )
-
-
-        except Exception as e:
-
-            self.show_error(
-                "Данные сохранены, но публикация не удалась:\n\n"
-                + str(e)
-            )
-
-            result = None
-
 
 
         callback = self.on_saved

@@ -713,6 +713,11 @@ class AppList(ctk.CTkFrame):
             "bundleIdentifier"
         )
 
+        name = app.get(
+            "name",
+            "приложение"
+        )
+
         data["apps"] = [
             item
             for item in data.get(
@@ -733,6 +738,53 @@ class AppList(ctk.CTkFrame):
         dialog.destroy()
 
         self.load_data()
+
+        try:
+
+            from core.gerastore_sync import GeraStoreSync
+
+            print()
+            print("=" * 60)
+            print("GeraStore Manager: приложение удалено")
+            print("=" * 60)
+            print("Запускаем синхронизацию с GitHub...")
+
+            sync = GeraStoreSync()
+
+            result = sync.sync(
+                commit_message=f"Remove {name} from GeraStore Manager"
+            )
+
+            print(
+                "Результат синхронизации:",
+                result
+            )
+
+            if result.get("changed"):
+
+                self.show_info(
+                    "Приложение удалено.\n\n"
+                    "GeraStore опубликован."
+                )
+
+            else:
+
+                self.show_info(
+                    "Приложение удалено.\n\n"
+                    "Изменений для публикации нет."
+                )
+
+        except Exception as error:
+
+            print()
+            print("ОШИБКА СИНХРОНИЗАЦИИ:")
+            print(error)
+
+            self.show_error(
+                "Приложение удалено локально,\n"
+                "но опубликовать удаление не удалось.\n\n"
+                f"Ошибка:\n{error}"
+            )
 
     # --------------------------------------------------
     # DIALOGS

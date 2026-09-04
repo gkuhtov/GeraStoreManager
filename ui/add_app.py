@@ -920,8 +920,57 @@ class AddApp(ctk.CTkFrame):
             self.info.insert(
                 "end",
                 "✓ Приложение добавлено "
-                "в GeraStore Manager.\n\n"
+                "в GeraStore Manager.\n"
             )
+
+            self.update()
+
+            self.info.insert(
+                "end",
+                "Публикация в GeraStore...\n"
+            )
+
+            self.update()
+
+            try:
+
+                from core.gerastore_sync import GeraStoreSync
+
+                sync = GeraStoreSync()
+
+                result = sync.sync(
+                    commit_message=f"Add {name} {version} from Manager"
+                )
+
+                if result.get("changed"):
+
+                    self.info.insert(
+                        "end",
+                        "✓ GeraStore опубликован.\n\n"
+                    )
+
+                else:
+
+                    self.info.insert(
+                        "end",
+                        "✓ Изменений для публикации нет.\n\n"
+                    )
+
+                self.update()
+
+            except Exception as sync_error:
+
+                self.info.insert(
+                    "end",
+                    "\nОШИБКА ПУБЛИКАЦИИ:\n"
+                    f"{sync_error}\n\n"
+                    "Приложение сохранено в Manager, "
+                    "но GeraStore не обновлён.\n\n"
+                )
+
+                self.update()
+
+                raise
 
             self.info.insert(
                 "end",
