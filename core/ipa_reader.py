@@ -9,6 +9,7 @@ def read_ipa(path):
         "name": "",
         "bundle_id": "",
         "version": "",
+        "minimum_ios": "",
         "size": 0
     }
 
@@ -26,12 +27,9 @@ def read_ipa(path):
         if not plist_file:
             raise Exception("Info.plist не найден")
 
-
         plist_data = ipa.read(plist_file)
 
-
     plist = plistlib.loads(plist_data)
-
 
     result["name"] = (
         plist.get("CFBundleDisplayName")
@@ -39,17 +37,20 @@ def read_ipa(path):
         or ""
     )
 
-
     result["bundle_id"] = plist.get(
         "CFBundleIdentifier",
         ""
     )
-
 
     result["version"] = plist.get(
         "CFBundleShortVersionString",
         ""
     )
 
+    result["minimum_ios"] = (
+        plist.get("MinimumOSVersion")
+        or plist.get("CFBundleMinimumOSVersion")
+        or ""
+    )
 
     return result

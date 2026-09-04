@@ -27,10 +27,6 @@ class AddApp(ctk.CTkFrame):
 
         self.create_interface()
 
-    # ==================================================
-    # INTERFACE
-    # ==================================================
-
     def create_interface(self):
 
         self.scroll_frame = ctk.CTkScrollableFrame(
@@ -105,7 +101,7 @@ class AddApp(ctk.CTkFrame):
         self.icon_label.grid(
             row=0,
             column=0,
-            rowspan=4,
+            rowspan=5,
             padx=(20, 15),
             pady=20
         )
@@ -166,12 +162,27 @@ class AddApp(ctk.CTkFrame):
             column=1,
             sticky="ew",
             padx=(0, 20),
+            pady=2
+        )
+
+        self.minimum_ios_preview = ctk.CTkLabel(
+            self.preview,
+            text="Минимальная iOS: •",
+            text_color="gray",
+            anchor="w"
+        )
+
+        self.minimum_ios_preview.grid(
+            row=4,
+            column=1,
+            sticky="ew",
+            padx=(0, 20),
             pady=(2, 20)
         )
 
         self.info = ctk.CTkTextbox(
             self.form,
-            height=120,
+            height=140,
             corner_radius=10
         )
 
@@ -180,10 +191,6 @@ class AddApp(ctk.CTkFrame):
             padx=10,
             pady=(0, 12)
         )
-
-        # ==================================================
-        # OTHER FIELDS
-        # ==================================================
 
         self.developer = self.create_field(
             "Разработчик",
@@ -220,10 +227,6 @@ class AddApp(ctk.CTkFrame):
         self.add_button.pack(
             pady=(20, 30)
         )
-
-    # ==================================================
-    # FIELDS
-    # ==================================================
 
     def create_field(
         self,
@@ -345,10 +348,6 @@ class AddApp(ctk.CTkFrame):
 
         return combo
 
-    # ==================================================
-    # SELECT IPA
-    # ==================================================
-
     def select_ipa(self):
 
         file = filedialog.askopenfilename(
@@ -369,30 +368,57 @@ class AddApp(ctk.CTkFrame):
                 file
             )
 
-            print("========================================")
-            print("IPA DEBUG")
-            print("IPA:", file)
+            print(
+                "========================================"
+            )
+
+            print(
+                "IPA DEBUG"
+            )
+
+            print(
+                "IPA:",
+                file
+            )
+
             print(
                 "BUNDLE ID:",
-                self.ipa_data.get("bundle_id")
+                self.ipa_data.get(
+                    "bundle_id"
+                )
             )
+
             print(
                 "NAME:",
-                self.ipa_data.get("name")
+                self.ipa_data.get(
+                    "name"
+                )
             )
+
             print(
                 "VERSION:",
-                self.ipa_data.get("version")
+                self.ipa_data.get(
+                    "version"
+                )
             )
+
+            print(
+                "MINIMUM iOS:",
+                self.ipa_data.get(
+                    "minimum_ios"
+                )
+            )
+
             print(
                 "SIZE:",
-                self.ipa_data.get("size")
+                self.ipa_data.get(
+                    "size"
+                )
             )
-            print("========================================")
 
-            # ==================================================
-            # ICON
-            # ==================================================
+            print(
+                "========================================"
+            )
 
             try:
 
@@ -408,14 +434,18 @@ class AddApp(ctk.CTkFrame):
 
                 print(
                     "ICON EXISTS:",
-                    os.path.isfile(self.icon_path)
+                    os.path.isfile(
+                        self.icon_path
+                    )
                     if self.icon_path
                     else False
                 )
 
                 if (
                     self.icon_path
-                    and os.path.isfile(self.icon_path)
+                    and os.path.isfile(
+                        self.icon_path
+                    )
                 ):
 
                     print(
@@ -429,15 +459,25 @@ class AddApp(ctk.CTkFrame):
 
                 import traceback
 
-                print("========================================")
-                print("ICON EXTRACTION ERROR")
+                print(
+                    "========================================"
+                )
+
+                print(
+                    "ICON EXTRACTION ERROR"
+                )
+
                 print(
                     type(icon_error).__name__,
                     ":",
                     icon_error
                 )
+
                 traceback.print_exc()
-                print("========================================")
+
+                print(
+                    "========================================"
+                )
 
                 raise
 
@@ -454,10 +494,6 @@ class AddApp(ctk.CTkFrame):
                     "что в архиве есть PNG."
                 )
 
-            # ==================================================
-            # NAME
-            # ==================================================
-
             name = self.ipa_data.get(
                 "name",
                 ""
@@ -469,10 +505,6 @@ class AddApp(ctk.CTkFrame):
             self.name_label.configure(
                 text=name
             )
-
-            # ==================================================
-            # VERSION
-            # ==================================================
 
             version = self.ipa_data.get(
                 "version",
@@ -486,10 +518,6 @@ class AddApp(ctk.CTkFrame):
                 text=f"Версия: {version}"
             )
 
-            # ==================================================
-            # BUNDLE ID
-            # ==================================================
-
             bundle_id = self.ipa_data.get(
                 "bundle_id",
                 ""
@@ -502,9 +530,17 @@ class AddApp(ctk.CTkFrame):
                 text=f"Bundle ID: {bundle_id}"
             )
 
-            # ==================================================
-            # DEVELOPER
-            # ==================================================
+            minimum_ios = self.ipa_data.get(
+                "minimum_ios",
+                ""
+            )
+
+            if not minimum_ios:
+                minimum_ios = "не указана"
+
+            self.minimum_ios_preview.configure(
+                text=f"Минимальная iOS: {minimum_ios}"
+            )
 
             developer = self.ipa_data.get(
                 "developer",
@@ -527,10 +563,6 @@ class AddApp(ctk.CTkFrame):
                     text=developer
                 )
 
-            # ==================================================
-            # SIZE
-            # ==================================================
-
             size = self.ipa_data.get(
                 "size",
                 0
@@ -541,10 +573,6 @@ class AddApp(ctk.CTkFrame):
                 2
             )
 
-            # ==================================================
-            # INFO
-            # ==================================================
-
             self.info.delete(
                 "1.0",
                 "end"
@@ -554,6 +582,7 @@ class AddApp(ctk.CTkFrame):
                 "end",
                 f"IPA выбран.\n\n"
                 f"Размер: {size_mb} MB\n"
+                f"Минимальная iOS: {minimum_ios}\n"
                 f"Иконка: {self.icon_path}\n\n"
             )
 
@@ -577,11 +606,6 @@ class AddApp(ctk.CTkFrame):
                 "end",
                 f"Ошибка чтения IPA:\n\n{error}"
             )
-
-    # ==================================================
-    # SAVE
-    # ==================================================
-
 
     def make_release_tag(self):
 
@@ -610,11 +634,8 @@ class AddApp(ctk.CTkFrame):
         )
 
         return (
-            f"gerastore-"
-            f"{safe_bundle}-"
-            f"{safe_version}"
+            f"gerastore-{safe_bundle}-{safe_version}"
         )
-
 
     def make_asset_name(self):
 
@@ -648,16 +669,17 @@ class AddApp(ctk.CTkFrame):
         )
 
         return (
-            f"{safe_name}_"
-            f"{safe_version}.ipa"
+            f"{safe_name}_{safe_version}.ipa"
         )
-
 
     def upload_to_github(self):
 
         settings = get_github_settings()
 
-        if not settings.get("token"):
+        if not settings.get(
+            "token"
+        ):
+
             raise Exception(
                 "GitHub Token не указан в settings.json"
             )
@@ -683,9 +705,7 @@ class AddApp(ctk.CTkFrame):
         release_name = name
 
         if version:
-            release_name += (
-                f" {version}"
-            )
+            release_name += f" {version}"
 
         description = (
             self.subtitle_field.get().strip()
@@ -714,7 +734,6 @@ class AddApp(ctk.CTkFrame):
             download_url
         )
 
-
     def save(self):
 
         if not self.ipa_data:
@@ -736,16 +755,12 @@ class AddApp(ctk.CTkFrame):
         if not self.icon_path:
 
             self.show_error(
-                "Иконка не извлечена из IPA.\\n"
-                "Публикация отменена.\\n"
+                "Иконка не извлечена из IPA.\n"
+                "Публикация отменена.\n"
                 "Выбери IPA заново."
             )
 
             return
-
-        # ==================================================
-        # DISABLE UI
-        # ==================================================
 
         self.add_button.configure(
             text="⏳  Добавление приложения...",
@@ -763,16 +778,12 @@ class AddApp(ctk.CTkFrame):
 
         self.info.insert(
             "end",
-            "Проверка данных приложения...\\n\\n"
+            "Проверка данных приложения...\n\n"
         )
 
         self.update()
 
         try:
-
-            # ==================================================
-            # BASIC DATA
-            # ==================================================
 
             name = self.ipa_data.get(
                 "name",
@@ -794,13 +805,20 @@ class AddApp(ctk.CTkFrame):
                 0
             )
 
-            # ==================================================
-            # GITHUB RELEASE
-            # ==================================================
+            minimum_ios = self.ipa_data.get(
+                "minimum_ios",
+                ""
+            )
 
             self.info.insert(
                 "end",
-                "Подготовка GitHub Release...\\n"
+                "Минимальная iOS: "
+                f"{minimum_ios or 'не указана'}\n\n"
+            )
+
+            self.info.insert(
+                "end",
+                "Подготовка GitHub Release...\n"
             )
 
             self.update()
@@ -811,33 +829,30 @@ class AddApp(ctk.CTkFrame):
 
             self.info.insert(
                 "end",
-                "✓ GitHub Release создан/найден.\\n"
+                "✓ GitHub Release создан/найден.\n"
             )
 
             self.info.insert(
                 "end",
-                f"✓ IPA загружен: {asset.get('name', '')}\\n"
+                f"✓ IPA загружен: "
+                f"{asset.get('name', '')}\n"
             )
 
             self.info.insert(
                 "end",
-                "✓ Download URL получен.\\n\\n"
+                "✓ Download URL получен.\n\n"
             )
 
             self.info.insert(
                 "end",
-                f"{download_url}\\n\\n"
+                f"{download_url}\n\n"
             )
 
             self.update()
 
-            # ==================================================
-            # APP PLIST
-            # ==================================================
-
             self.info.insert(
                 "end",
-                "Создание appPlist...\\n"
+                "Создание appPlist...\n"
             )
 
             self.update()
@@ -847,124 +862,97 @@ class AddApp(ctk.CTkFrame):
                 bundle_id=bundle_id,
                 version=version,
                 download_url=download_url,
-                size=size
+                size=size,
+                minimum_ios=minimum_ios
             )
 
             self.info.insert(
                 "end",
-                f"✓ Plist: {app_plist}\\n\\n"
+                f"✓ Plist: {app_plist}\n"
+            )
+
+            self.info.insert(
+                "end",
+                f"✓ Minimum iOS: "
+                f"{minimum_ios or 'не указана'}\n\n"
             )
 
             self.update()
-
-            # ==================================================
-            # DESCRIPTION
-            # ==================================================
 
             description = self.description.get(
                 "1.0",
                 "end"
             ).strip()
 
-            # ==================================================
-            # CREATE APP OBJECT
-            # ==================================================
-
             app = {
-
-                "name":
-                name,
-
-                "bundleIdentifier":
-                bundle_id,
-
-                "developerName":
-                self.developer.get().strip(),
-
-                "category":
-                self.category_field.get(),
-
-                "subtitle":
-                self.subtitle_field.get().strip(),
-
-                "localizedDescription":
-                description,
-
-                "iconURL":
-                self.icon_path,
-
-                "versions":
-                [
+                "name": name,
+                "bundleIdentifier": bundle_id,
+                "developerName": self.developer.get().strip(),
+                "category": self.category_field.get(),
+                "subtitle": self.subtitle_field.get().strip(),
+                "localizedDescription": description,
+                "iconURL": self.icon_path,
+                "versions": [
                     {
-
-                        "version":
-                        version,
-
-                        "date":
-                        datetime.now(
+                        "version": version,
+                        "date": datetime.now(
                             timezone.utc
                         ).strftime(
                             "%Y-%m-%dT%H:%M:%SZ"
                         ),
-
-                        "downloadURL":
-                        download_url,
-
-                        "size":
-                        size,
-
-                        "appPlist":
-                        app_plist
-
+                        "downloadURL": download_url,
+                        "size": size,
+                        "minimumOSVersion": minimum_ios,
+                        "appPlist": app_plist
                     }
                 ]
             }
 
-            # ==================================================
-            # SAVE TO DATABASE
-            # ==================================================
-
             self.info.insert(
                 "end",
-                "Сохранение приложения...\\n"
+                "Сохранение приложения...\n"
             )
 
             self.update()
 
-            add_app(
-                app
-            )
+            add_app(app)
 
             self.info.insert(
                 "end",
                 "✓ Приложение добавлено "
-                "в GeraStore Manager.\\n\\n"
+                "в GeraStore Manager.\n\n"
             )
 
             self.info.insert(
                 "end",
-                "GitHub Release:\\n"
+                "GitHub Release:\n"
             )
 
             self.info.insert(
                 "end",
-                f"{release.get('html_url', '')}\\n\\n"
+                f"{release.get('html_url', '')}\n\n"
             )
 
             self.info.insert(
                 "end",
-                "Download URL:\\n"
+                "Download URL:\n"
             )
 
             self.info.insert(
                 "end",
-                f"{download_url}\\n\\n"
+                f"{download_url}\n\n"
+            )
+
+            self.info.insert(
+                "end",
+                f"Минимальная iOS: "
+                f"{minimum_ios or 'не указана'}\n\n"
             )
 
             self.info.insert(
                 "end",
                 f"Размер IPA: "
-                f"{round(size / 1024 / 1024, 2)} MB\\n\\n"
+                f"{round(size / 1024 / 1024, 2)} MB\n\n"
             )
 
             self.info.insert(
@@ -986,7 +974,7 @@ class AddApp(ctk.CTkFrame):
 
             self.info.insert(
                 "end",
-                "\\n\\nОШИБКА:\\n"
+                "\n\nОШИБКА:\n"
                 f"{error}"
             )
 
