@@ -156,21 +156,18 @@ def get_plist_file_size(
         return 0
 
     try:
+        filename = plist_url.rstrip("/").split("/")[-1]
 
-        request = Request(
-            plist_url,
-            headers={
-                "User-Agent":
-                    "GeraStoreManager/1.0"
-            }
+        local_path = (
+            Path(GERASTORE_DIR)
+            / "plist"
+            / filename
         )
 
-        with urlopen(
-            request,
-            timeout=15
-        ) as response:
+        if not local_path.is_file():
+            return 0
 
-            plist_data = response.read()
+        plist_data = local_path.read_bytes()
 
         data = plistlib.loads(
             plist_data
@@ -198,28 +195,14 @@ def get_plist_file_size(
         )
 
         try:
-
             return int(
                 file_size
             )
-
         except Exception:
-
             return 0
 
-    except Exception as e:
-
-        print(
-            "Не удалось получить размер "
-            "из appPlist:",
-            plist_url,
-            "|",
-            e
-        )
-
+    except Exception:
         return 0
-
-
 def get_download_file_size(
     download_url
 ):
