@@ -197,6 +197,53 @@
       ],
       "addedDate": "2026-09-04T11:00:16.536706Z",
       "appUpdateTime": "2026-09-04T11:00:16.536706Z"
+    },
+    {
+      "name": "Gera Test One",
+      "bundleIdentifier": "com.gerakstore.test.one",
+      "developerName": "ГЕРЫЧ",
+      "category": "Приложения",
+      "subtitle": "",
+      "localizedDescription": "тест3",
+      "iconURL": "https://gkuhtov.github.io/GeraStore/icons/com.gerakstore.test.one.png",
+      "versions": [
+        {
+          "version": "1.0.0",
+          "date": "2026-09-04T12:53:59Z",
+          "downloadURL": "https://github.com/gkuhtov/GeraStore/releases/download/gerastore-com.gerakstore.test.one-1.0.0/GeraTestOne-1.0.0.ipa",
+          "size": 126346,
+          "appPlist": "https://gkuhtov.github.io/GeraStore/plist/com.gerakstore.test.one.plist"
+        },
+        {
+          "version": "1.1.0",
+          "date": "2026-09-04T12:59:22Z",
+          "downloadURL": "https://github.com/gkuhtov/GeraStore/releases/download/gerastore-com.gerakstore.test.one-1.1.0/GeraTestOne-1.1.0.ipa",
+          "size": 180926,
+          "appPlist": "https://gkuhtov.github.io/GeraStore/plist/com.gerakstore.test.one.plist"
+        }
+      ],
+      "addedDate": "2026-09-04T12:53:59.563881Z",
+      "appUpdateTime": "2026-09-04T12:59:22.727656Z"
+    },
+    {
+      "name": "Gera Test Two",
+      "bundleIdentifier": "com.gerakstore.test.two",
+      "developerName": "ГЕРЫЧ",
+      "category": "Приложения",
+      "subtitle": "",
+      "localizedDescription": "тест2",
+      "iconURL": "https://gkuhtov.github.io/GeraStore/icons/com.gerakstore.test.two.png",
+      "versions": [
+        {
+          "version": "2.5.1",
+          "date": "2026-09-04T12:55:34Z",
+          "downloadURL": "https://github.com/gkuhtov/GeraStore/releases/download/gerastore-com.gerakstore.test.two-2.5.1/GeraTestTwo-2.5.1.ipa",
+          "size": 249264,
+          "appPlist": "https://gkuhtov.github.io/GeraStore/plist/com.gerakstore.test.two.plist"
+        }
+      ],
+      "addedDate": "2026-09-04T12:55:34.082533Z",
+      "appUpdateTime": "2026-09-04T12:55:34.082533Z"
     }
   ]
 }
