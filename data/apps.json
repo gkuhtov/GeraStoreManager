@@ -104,10 +104,10 @@
     {
       "name": "Online",
       "bundleIdentifier": "com.inv.gen",
-      "developerName": "GK",
+      "developerName": "ГЕРЫЧ",
       "category": "Финансы",
       "subtitle": "Банковское приложение для управления счетами и переводов.",
-      "localizedDescription": "⚙️Особенности⚙️\n\n•Переводы и платежи.\n•Оплата услуг по QR-коду.\n\n🏦 СберБанк позволяет управлять картами и счетами, совершать переводы и оплачивать различные услуги прямо со смартфона.",
+      "localizedDescription": "⚙️Особенности⚙️\n\n🩷Переводы и платежи.\n🩷Новое приложение, удалённое из ❌💙AppStore.\n🩷Оплата услуг по QR-коду.\n\n🏦 СберБанк Онлайн - полноценное банковское приложение для управления финансами, платежей и переводов с iPhone.",
       "iconURL": "assets/icons/com.inv.gen.png",
       "versions": [
         {
@@ -123,10 +123,10 @@
     {
       "name": "Сириус",
       "bundleIdentifier": "com.sm.FlowTime",
-      "developerName": "GK",
+      "developerName": "ГЕРЫЧ",
       "category": "Финансы",
       "subtitle": "Банковское приложение ВТБ для iPhone.",
-      "localizedDescription": "⚙️Особенности⚙️\n\n•Переводы по номеру телефона.\n•Оплата покупок и услуг.\n\n💳 ВТБ Онлайн позволяет совершать переводы, оплачивать покупки и услуги, управлять картами и контролировать расходы со смартфона.",
+      "localizedDescription": "⚙️Особенности⚙️\n\n🩷Переводы по номеру телефона.\n🩷Недоступно в ❌💙AppStore.\n🩷Оплата покупок и услуг.\n\n💳 ВТБ Онлайн позволяет управлять картами и счетами, совершать переводы, оплачивать покупки и услуги прямо с iPhone.",
       "iconURL": "assets/icons/com.sm.FlowTime.png",
       "versions": [
         {
@@ -145,7 +145,7 @@
       "developerName": "GK",
       "category": "Навигация",
       "subtitle": "PRO-версия приложения для предупреждения о камерах и опасностях на дороге.",
-      "localizedDescription": "⚙️Особенности PRO⚙️\n\n•Без рекламы.\n•Работа в фоновом режиме.\n\n🚗 Radarbot предупреждает о камерах контроля и опасных участках дороги. Приложение работает в фоне и может использоваться вместе с навигатором.",
+      "localizedDescription": "⚙️Особенности PRO⚙️\n\n🩷Без рекламы.\n🩷Визуальная интеграция с другими приложениями.\n🩷Работа в фоновом режиме.\n\n🚗 Radarbot предупреждает о камерах контроля и опасных участках дороги. Приложение работает в фоне и может использоваться вместе с навигатором.",
       "iconURL": "assets/icons/com.iteration-mobile.radarbot-free-ww.png",
       "versions": [
         {
@@ -157,6 +157,46 @@
         }
       ],
       "appUpdateTime": "2026-09-02T00:00:00Z"
+    },
+    {
+      "name": "BeautyCam",
+      "bundleIdentifier": "com.meitu.myxj",
+      "developerName": "ГЕРЫЧ",
+      "category": "Фото и видео",
+      "subtitle": "",
+      "localizedDescription": "⚙️Особенности PRO⚙️\n\n🩷Премиум-функции.\n🩷Расширенные инструменты ретуши.\n🩷Фильтры и эффекты без ограничений.\n\n📸 BeautyCam - приложение для обработки фотографий и селфи с инструментами ретуши, фильтрами, эффектами и улучшением внешности. Некотрые функции ai не работают.",
+      "iconURL": "https://gkuhtov.github.io/GeraStore/icons/com.meitu.myxj.png",
+      "versions": [
+        {
+          "version": "12.6.60",
+          "date": "2026-09-04T09:51:47Z",
+          "downloadURL": "https://github.com/gkuhtov/GeraStore/releases/download/gerastore-com.meitu.myxj-12.6.60/BeautyCam-ipaomtk.com.ipa",
+          "size": 230360881,
+          "appPlist": "https://gkuhtov.github.io/GeraStore/plist/com.meitu.myxj.plist"
+        }
+      ],
+      "addedDate": "2026-09-04T09:51:47.257430Z",
+      "appUpdateTime": "2026-09-04T09:51:47.257430Z"
+    },
+    {
+      "name": "Яндекс Банк",
+      "bundleIdentifier": "com.yandex.fintech.bank-app",
+      "developerName": "ГЕРЫЧ",
+      "category": "Финансы",
+      "subtitle": "",
+      "localizedDescription": "⚙️Особенности⚙️\n\n🩷Оплата через Пэй и СБП.\n🩷Карта Пэй и счета разных банков.\n🩷Кешбэк баллами Плюса и персональные предложения.\n\n💳 Яндекс Пэй объединяет карты и счета в одном приложении, позволяет быстро оплачивать покупки и получать выгоду в сервисах Яндекса и у партнёров.",
+      "iconURL": "https://gkuhtov.github.io/GeraStore/icons/com.yandex.fintech.bank-app.png",
+      "versions": [
+        {
+          "version": "0.234.4",
+          "date": "2026-09-04T11:00:16Z",
+          "downloadURL": "https://github.com/gkuhtov/GeraStore/releases/download/gerastore-com.yandex.fintech.bank-app-0.234.4/v0.234.4.ipa",
+          "size": 54344567,
+          "appPlist": "https://gkuhtov.github.io/GeraStore/plist/com.yandex.fintech.bank-app.plist"
+        }
+      ],
+      "addedDate": "2026-09-04T11:00:16.536706Z",
+      "appUpdateTime": "2026-09-04T11:00:16.536706Z"
     }
   ]
 }

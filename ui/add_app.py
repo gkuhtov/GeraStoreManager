@@ -555,8 +555,6 @@ class AddApp(ctk.CTkFrame):
                 f"IPA выбран.\n\n"
                 f"Размер: {size_mb} MB\n"
                 f"Иконка: {self.icon_path}\n\n"
-                f"Теперь вставь ссылку на скачивание IPA "
-                f"в поле выше и заполни остальные данные."
             )
 
             self.select_button.configure(
