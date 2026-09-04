@@ -438,12 +438,12 @@ class GeraStoreSync:
                 )
 
 
-                if plist_size:
+                if not size and plist_size:
 
                     size = plist_size
 
 
-                else:
+                elif not size:
 
                     download_url = version.get(
                         "downloadURL",
@@ -982,23 +982,49 @@ class GeraStoreSync:
 
 
                 "size":
-                size,
+                latest.get(
+                    "size",
+                    0
+                ),
 
 
                 "appSize":
-                size,
+                latest.get(
+                    "appSize",
+                    latest.get(
+                        "size",
+                        0
+                    )
+                ),
 
 
                 "fileSize":
-                size,
+                latest.get(
+                    "fileSize",
+                    latest.get(
+                        "size",
+                        0
+                    )
+                ),
 
 
                 "appFileSize":
-                size,
+                latest.get(
+                    "appFileSize",
+                    latest.get(
+                        "size",
+                        0
+                    )
+                ),
 
 
                 "human_file_size":
-                human_file_size(size),
+                human_file_size(
+                    latest.get(
+                        "size",
+                        0
+                    )
+                ),
 
 
                 "versions":

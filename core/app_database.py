@@ -162,69 +162,137 @@ def add_app(app):
                 "addedDate"
             ]
 
-        elif not app.get(
-            "addedDate"
-        ):
+        else:
 
             app["addedDate"] = get_now()
 
         # --------------------------------------------------
-        # Получаем последнюю старую версию.
+        # Старые версии.
         # --------------------------------------------------
 
-        old_latest = get_latest_version(
-            existing
+        old_versions = existing.get(
+            "versions",
+            []
         )
 
-        # --------------------------------------------------
-        # Получаем новую версию.
-        # --------------------------------------------------
-
-        new_latest = get_latest_version(
-            app
-        )
-
-        old_version = old_latest.get(
-            "version",
-            ""
-        )
-
-        new_version = new_latest.get(
-            "version",
-            ""
-        )
-
-        old_url = old_latest.get(
-            "downloadURL",
-            ""
-        )
-
-        new_url = new_latest.get(
-            "downloadURL",
-            ""
+        # Делаем отдельную копию списка,
+        # чтобы не менять старую запись напрямую.
+        versions = list(
+            old_versions
         )
 
         # --------------------------------------------------
-        # Если версия или ссылка изменились,
-        # обновляем appUpdateTime.
+        # Новая версия.
         # --------------------------------------------------
 
-        if (
-            old_version != new_version
-            or old_url != new_url
-        ):
+        new_versions = app.get(
+            "versions",
+            []
+        )
 
-            app["appUpdateTime"] = get_now()
+        if not new_versions:
 
-        else:
+            # Защита от некорректной записи.
+            app["versions"] = versions
 
             app["appUpdateTime"] = existing.get(
                 "appUpdateTime",
                 get_now()
             )
 
+        else:
+
+            new_version_data = new_versions[-1]
+
+            new_version = new_version_data.get(
+                "version",
+                ""
+            )
+
+            new_url = new_version_data.get(
+                "downloadURL",
+                ""
+            )
+
+            # --------------------------------------------------
+            # Проверяем, существует ли уже такая версия.
+            # --------------------------------------------------
+
+            existing_version_index = None
+
+            for index, version_data in enumerate(
+                versions
+            ):
+
+                if version_data.get(
+                    "version",
+                    ""
+                ) == new_version:
+
+                    existing_version_index = index
+                    break
+
+            # --------------------------------------------------
+            # Новая версия.
+            # --------------------------------------------------
+
+            if existing_version_index is None:
+
+                versions.append(
+                    new_version_data
+                )
+
+                app["appUpdateTime"] = get_now()
+
+                print()
+                print(
+                    f"Новая версия обнаружена: "
+                    f"{new_version}"
+                )
+
+            # --------------------------------------------------
+            # Версия уже существует.
+            # --------------------------------------------------
+
+            else:
+
+                old_version_data = versions[
+                    existing_version_index
+                ]
+
+                old_url = old_version_data.get(
+                    "downloadURL",
+                    ""
+                )
+
+                # Обновляем запись версии, если
+                # изменился URL или данные версии.
+                if old_version_data != new_version_data:
+
+                    versions[
+                        existing_version_index
+                    ] = new_version_data
+
+                    app["appUpdateTime"] = get_now()
+
+                    print()
+                    print(
+                        f"Версия обновлена: "
+                        f"{new_version}"
+                    )
+
+                else:
+
+                    app["appUpdateTime"] = existing.get(
+                        "appUpdateTime",
+                        get_now()
+                    )
+
+            app["versions"] = versions
+
         # --------------------------------------------------
-        # Полностью заменяем старую запись актуальной.
+        # Сохраняем актуальные данные приложения,
+        # но версии оставляем объединёнными.
         # --------------------------------------------------
 
         index = existing_apps.index(
