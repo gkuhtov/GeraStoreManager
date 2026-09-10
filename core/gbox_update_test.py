@@ -6,11 +6,11 @@ from datetime import datetime, timezone
 MANAGER_APPS = "data/apps.json"
 
 OLD_REPO = os.path.expanduser(
-    "~/Projects/GeraStore/repo.json"
+    "~/Projects/GeraKStore/repo.json"
 )
 
 TEST_REPO = os.path.expanduser(
-    "~/Projects/GeraStore-Test/repo.json"
+    "~/Projects/GeraKStore-Test/repo.json"
 )
 
 
@@ -148,7 +148,7 @@ def build_repo():
     return {
 
         "sourceName":
-        "GeraStore Test",
+        "GeraKStore Test",
 
         "sourceUpdateTime":
         now_time(),

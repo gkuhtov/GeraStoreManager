@@ -41,7 +41,7 @@ def get_github_settings():
 
 
 # ==================================================
-# GeraStore Categories
+# GeraKStore Categories
 # ==================================================
 
 APP_CATEGORIES = [

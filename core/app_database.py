@@ -21,8 +21,8 @@ def load_apps():
     if not os.path.exists(DATABASE):
 
         return {
-            "name": "GeraStore",
-            "identifier": "com.gkuhtov.gerastore",
+            "name": "GeraKStore",
+            "identifier": "com.gkuhtov.gerakstore",
             "apps": []
         }
 

@@ -56,7 +56,7 @@ class AddApp(ctk.CTkFrame):
 
         subtitle = ctk.CTkLabel(
             self.form,
-            text="Выберите IPA-файл для добавления в GeraStore",
+            text="Выберите IPA-файл для добавления в GeraKStore",
             text_color="gray"
         )
 

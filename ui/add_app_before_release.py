@@ -52,7 +52,7 @@ class AddApp(ctk.CTkFrame):
 
         subtitle = ctk.CTkLabel(
             self.form,
-            text="Выберите IPA-файл для добавления в GeraStore",
+            text="Выберите IPA-файл для добавления в GeraKStore",
             text_color="gray"
         )
 
@@ -457,7 +457,7 @@ class AddApp(ctk.CTkFrame):
         )
 
         return (
-            f"gerastore-"
+            f"gerakstore-"
             f"{safe_bundle}-"
             f"{safe_version}"
         )
@@ -517,7 +517,7 @@ class AddApp(ctk.CTkFrame):
 
         name = self.ipa_data.get(
             "name",
-            "GeraStore App"
+            "GeraKStore App"
         )
 
         version = self.ipa_data.get(

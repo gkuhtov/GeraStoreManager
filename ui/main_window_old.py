@@ -15,7 +15,7 @@ class MainWindow(ctk.CTk):
 
         super().__init__()
 
-        self.title("GeraStore Manager")
+        self.title("GeraKStore Manager")
         self.geometry("1100x900")
 
 
@@ -26,7 +26,7 @@ class MainWindow(ctk.CTk):
 
         ctk.CTkLabel(
             self,
-            text="GeraStore Manager",
+            text="GeraKStore Manager",
             font=("Arial", 32)
         ).pack(
             pady=20

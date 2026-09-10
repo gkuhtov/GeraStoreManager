@@ -6,13 +6,13 @@ from core.app_database import load_apps
 
 
 TEST_REPO = os.path.expanduser(
-    "~/Projects/GeraStore-Test/repo.json"
+    "~/Projects/GeraKStore-Test/repo.json"
 )
 
 
 BASE_URL = (
     "https://gkuhtov.github.io/"
-    "GeraStore-Test/"
+    "GeraKStore-Test/"
 )
 
 
@@ -160,7 +160,7 @@ def build_test_repo():
         "1.0",
 
         "sourceName":
-        "GeraStore Test",
+        "GeraKStore Test",
 
         "sourceAuthor":
         "ГЕРЫЧ",

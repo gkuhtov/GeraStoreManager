@@ -1,6 +1,6 @@
 {
-  "name": "GeraStore",
-  "identifier": "com.gkuhtov.gerastore",
+  "name": "GeraKStore",
+  "identifier": "com.gkuhtov.gerakstore",
   "apps": [
     {
       "name": "Board Adventure",

@@ -7,7 +7,7 @@ from core.cgbi import convert_cgbi
 
 
 GERASTORE_ICONS = os.path.expanduser(
-    "~/Projects/GeraStore/icons"
+    "~/Projects/GeraKStore/icons"
 )
 
 
@@ -385,6 +385,6 @@ def extract_icon(
 
     return (
         "https://gkuhtov.github.io/"
-        "GeraStore/icons/"
+        "GeraKStore/icons/"
         f"{bundle_id}.png"
     )

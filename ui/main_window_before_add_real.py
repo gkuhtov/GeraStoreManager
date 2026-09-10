@@ -11,7 +11,7 @@ class MainWindow(ctk.CTk):
         ctk.set_appearance_mode("dark")
         ctk.set_default_color_theme("blue")
 
-        self.title("GeraStore Manager")
+        self.title("GeraKStore Manager")
 
         self.geometry("1000x700")
         self.minsize(900, 600)
@@ -104,7 +104,7 @@ class MainWindow(ctk.CTk):
 
         self.logo = ctk.CTkLabel(
             self.sidebar,
-            text="GeraStore",
+            text="GeraKStore",
             font=(
                 "Arial",
                 25,
@@ -280,7 +280,7 @@ class MainWindow(ctk.CTk):
 
         self.create_page_title(
             "Главная",
-            "Управление приложениями GeraStore"
+            "Управление приложениями GeraKStore"
         )
 
         self.current_page = ctk.CTkFrame(
@@ -531,7 +531,7 @@ class MainWindow(ctk.CTk):
 
         self.create_page_title(
             "Приложения",
-            "Все приложения в GeraStore Manager"
+            "Все приложения в GeraKStore Manager"
         )
 
         self.current_page = AppList(
@@ -555,7 +555,7 @@ class MainWindow(ctk.CTk):
 
         self.create_page_title(
             "Добавить IPA",
-            "Добавление нового приложения в GeraStore"
+            "Добавление нового приложения в GeraKStore"
         )
 
         self.current_page = ctk.CTkFrame(
@@ -624,7 +624,7 @@ class MainWindow(ctk.CTk):
 
         self.create_page_title(
             "Репозиторий",
-            "Состояние локального GeraStore"
+            "Состояние локального GeraKStore"
         )
 
         self.current_page = ctk.CTkFrame(
@@ -658,7 +658,7 @@ class MainWindow(ctk.CTk):
 
         self.create_page_title(
             "Настройки",
-            "Настройки GeraStore Manager"
+            "Настройки GeraKStore Manager"
         )
 
         self.current_page = ctk.CTkFrame(

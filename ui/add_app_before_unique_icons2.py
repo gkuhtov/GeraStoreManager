@@ -41,7 +41,7 @@ class AddApp(ctk.CTkFrame):
 
         subtitle = ctk.CTkLabel(
             self.form,
-            text="Выберите IPA-файл для добавления в GeraStore",
+            text="Выберите IPA-файл для добавления в GeraKStore",
             text_color="gray"
         )
         subtitle.pack(pady=(0, 15))
@@ -167,7 +167,7 @@ class AddApp(ctk.CTkFrame):
 
         self.download = self.create_field(
             "Download URL",
-            "https://gkuhtov.github.io/GeraStore/ipa/App.ipa"
+            "https://gkuhtov.github.io/GeraKStore/ipa/App.ipa"
         )
 
         self.add_button = ctk.CTkButton(
@@ -318,7 +318,7 @@ class AddApp(ctk.CTkFrame):
 
             download_url = (
                 "https://gkuhtov.github.io/"
-                "GeraStore/ipa/"
+                "GeraKStore/ipa/"
                 + download_name
                 + ".ipa"
             )
