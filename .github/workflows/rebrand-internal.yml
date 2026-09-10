@@ -1,0 +1,60 @@
+name: Завершить ребрендинг Manager
+
+on:
+  push:
+    branches: [master]
+
+permissions:
+  contents: write
+
+jobs:
+  rebrand:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Получить репозиторий
+        uses: actions/checkout@v4
+
+      - name: Обновить внутренние имена
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          skip = {".git", ".github"}
+          for path in Path(".").rglob("*"):
+              if not path.is_file() or any(part in skip for part in path.parts):
+                  continue
+              try:
+                  text = path.read_text(encoding="utf-8")
+              except (UnicodeDecodeError, OSError):
+                  continue
+              new = text.replace("GeraStore", "GeraKStore").replace("gerastore", "gerakstore")
+              if new != text:
+                  path.write_text(new, encoding="utf-8")
+          PY
+
+      - name: Сохранить изменения
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m "Завершить ребрендинг Manager"
+          git push
+
+      - name: Удалить одноразовый workflow
+        if: success()
+        shell: bash
+        run: |
+          rm -f .github/workflows/rebrand-internal.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .github/workflows/rebrand-internal.yml
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m "Удалить одноразовый workflow ребрендинга"
+          git push
