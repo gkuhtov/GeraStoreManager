@@ -1,1 +1,1 @@
-# GeraStore Manager
+# GeraKStore Manager

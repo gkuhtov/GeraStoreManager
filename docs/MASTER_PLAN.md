@@ -1,8 +1,8 @@
-# GeraStore Manager
+# GeraKStore Manager
 
 ## Описание проекта
 
-GeraStore Manager — программа для управления IPA репозиторием GeraStore.
+GeraKStore Manager — программа для управления IPA репозиторием GeraKStore.
 
 Цель проекта:
 
@@ -21,7 +21,7 @@ GeraStore Manager — программа для управления IPA реп�
 - Хранение нескольких версий.
 - Редактирование данных приложения.
 
-### Репозиторий GeraStore
+### Репозиторий GeraKStore
 
 - Генерация repo.json.
 - Работа с apps.json.

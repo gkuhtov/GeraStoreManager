@@ -570,21 +570,21 @@ class AppList(ctk.CTkFrame):
 
         print()
         print("=" * 60)
-        print("GeraStore Manager: приложение сохранено")
+        print("GeraKStore Manager: приложение сохранено")
         print("=" * 60)
 
         self.refresh()
 
         try:
 
-            from core.gerastore_sync import GeraStoreSync
+            from core.gerastore_sync import GeraKStoreSync
 
             print("Запускаем синхронизацию с GitHub...")
 
-            sync = GeraStoreSync()
+            sync = GeraKStoreSync()
 
             result = sync.sync(
-                commit_message="Update application from GeraStore Manager"
+                commit_message="Update application from GeraKStore Manager"
             )
 
             print(
@@ -741,18 +741,18 @@ class AppList(ctk.CTkFrame):
 
         try:
 
-            from core.gerastore_sync import GeraStoreSync
+            from core.gerastore_sync import GeraKStoreSync
 
             print()
             print("=" * 60)
-            print("GeraStore Manager: приложение удалено")
+            print("GeraKStore Manager: приложение удалено")
             print("=" * 60)
             print("Запускаем синхронизацию с GitHub...")
 
-            sync = GeraStoreSync()
+            sync = GeraKStoreSync()
 
             result = sync.sync(
-                commit_message=f"Remove {name} from GeraStore Manager"
+                commit_message=f"Remove {name} from GeraKStore Manager"
             )
 
             print(
@@ -764,7 +764,7 @@ class AppList(ctk.CTkFrame):
 
                 self.show_info(
                     "Приложение удалено.\n\n"
-                    "GeraStore опубликован."
+                    "GeraKStore опубликован."
                 )
 
             else:
@@ -797,7 +797,7 @@ class AppList(ctk.CTkFrame):
         )
 
         dialog.title(
-            "GeraStore Manager"
+            "GeraKStore Manager"
         )
 
         dialog.geometry(

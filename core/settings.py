@@ -1,7 +1,9 @@
 import json
+import os
 
 
 SETTINGS_FILE = "data/settings.json"
+GITHUB_TOKEN_ENV = "GERAKSTORE_GITHUB_TOKEN"
 
 
 def load_settings():
@@ -24,6 +26,17 @@ def get_github_settings():
         {}
     )
 
+    token = github.get(
+        "token",
+        ""
+    ).strip()
+
+    if not token:
+        token = os.getenv(
+            GITHUB_TOKEN_ENV,
+            ""
+        ).strip()
+
     return {
         "owner": github.get(
             "owner",
@@ -33,15 +46,12 @@ def get_github_settings():
             "repo",
             ""
         ),
-        "token": github.get(
-            "token",
-            ""
-        )
+        "token": token
     }
 
 
 # ==================================================
-# GeraStore Categories
+# GeraKStore Categories
 # ==================================================
 
 APP_CATEGORIES = [

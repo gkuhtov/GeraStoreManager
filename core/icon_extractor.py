@@ -6,8 +6,8 @@ import plistlib
 from core.cgbi import convert_cgbi
 
 
-GERASTORE_ICONS = os.path.expanduser(
-    "~/Projects/GeraStore/icons"
+GERAKSTORE_ICONS = os.path.expanduser(
+    "~/Projects/GeraKStore/icons"
 )
 
 
@@ -250,12 +250,12 @@ def extract_icon(
     """
 
     os.makedirs(
-        GERASTORE_ICONS,
+        GERAKSTORE_ICONS,
         exist_ok=True
     )
 
     output = os.path.join(
-        GERASTORE_ICONS,
+        GERAKSTORE_ICONS,
         f"{bundle_id}.png"
     )
 
@@ -385,6 +385,6 @@ def extract_icon(
 
     return (
         "https://gkuhtov.github.io/"
-        "GeraStore/icons/"
+        "GeraKStore/icons/"
         f"{bundle_id}.png"
     )

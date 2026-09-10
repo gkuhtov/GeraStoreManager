@@ -122,20 +122,20 @@ MANAGER_APPS = (
 )
 
 
-GERASTORE_DIR = os.path.expanduser(
-    "~/Projects/GeraStore"
+GERAKSTORE_DIR = os.path.expanduser(
+    "~/Projects/GeraKStore"
 )
 
 
-GERASTORE_REPO = os.path.join(
-    GERASTORE_DIR,
+GERAKSTORE_REPO = os.path.join(
+    GERAKSTORE_DIR,
     "repo.json"
 )
 
 
 BASE_URL = (
     "https://gkuhtov.github.io/"
-    "GeraStore/"
+    "GeraKStore/"
 )
 
 
@@ -159,7 +159,7 @@ def get_plist_file_size(
         filename = plist_url.rstrip("/").split("/")[-1]
 
         local_path = (
-            Path(GERASTORE_DIR)
+            Path(GERAKSTORE_DIR)
             / "plist"
             / filename
         )
@@ -318,20 +318,20 @@ def human_file_size(
     )
 
 
-class GeraStoreSync:
+class GeraKStoreSync:
 
     def __init__(
         self
     ):
 
         if not os.path.isdir(
-            GERASTORE_DIR
+            GERAKSTORE_DIR
         ):
 
             raise Exception(
-                "GeraStore репозиторий "
+                "GeraKStore репозиторий "
                 "не найден: "
-                + GERASTORE_DIR
+                + GERAKSTORE_DIR
             )
 
     def load_json(
@@ -368,7 +368,7 @@ class GeraStoreSync:
     ):
 
         return self.load_json(
-            GERASTORE_REPO
+            GERAKSTORE_REPO
         )
 
     def find_old_app(
@@ -774,7 +774,7 @@ class GeraStoreSync:
 
                     new_icon = (
                         "https://gkuhtov.github.io/"
-                        "GeraStore/icons/"
+                        "GeraKStore/icons/"
                         +
                         new_icon.replace(
                             "assets/icons/",
@@ -1021,7 +1021,7 @@ class GeraStoreSync:
             "sourceName":
             data.get(
                 "name",
-                "GeraStore"
+                "GeraKStore"
             ),
 
             "sourceAuthor":
@@ -1035,11 +1035,11 @@ class GeraStoreSync:
 
             "sourceLinkUrl":
             "https://github.com/"
-            "gkuhtov/GeraStore",
+            "gkuhtov/GeraKStore",
 
             "sourceImage":
             "https://gkuhtov.github.io/"
-            "GeraStore/icons/app_icon.png",
+            "GeraKStore/icons/app_icon.png",
 
             "sourceDescription":
             "Каталог IPA приложений для GBox.",
@@ -1092,7 +1092,7 @@ class GeraStoreSync:
 
         """
         Пишет ТОЛЬКО в опубликованный файл:
-        ~/Projects/GeraStore/repo.json
+        ~/Projects/GeraKStore/repo.json
 
         Локальное состояние менеджера
         (data/repo.json) обновляется
@@ -1102,7 +1102,7 @@ class GeraStoreSync:
         repo = self.build_repo()
 
         with open(
-            GERASTORE_REPO,
+            GERAKSTORE_REPO,
             "w",
             encoding="utf-8"
         ) as f:
@@ -1140,7 +1140,7 @@ class GeraStoreSync:
                 *args
             ],
 
-            cwd=GERASTORE_DIR,
+            cwd=GERAKSTORE_DIR,
 
             capture_output=True,
 
@@ -1155,17 +1155,27 @@ class GeraStoreSync:
 
             raise Exception(
                 result.stderr
+                or result.stdout
             )
 
-        return result.stdout.strip()
+        output = "\n".join(
+            part.strip()
+            for part in (
+                result.stdout,
+                result.stderr
+            )
+            if part.strip()
+        )
+
+        return output
 
     def publish(
         self,
-        commit_message="GeraStore update"
+        commit_message="GeraKStore update"
     ):
 
         repo_file = (
-            Path(GERASTORE_DIR)
+            Path(GERAKSTORE_DIR)
             / "repo.json"
         )
 
@@ -1252,7 +1262,7 @@ class GeraStoreSync:
 
     def sync(
         self,
-        commit_message="GeraStore update"
+        commit_message="GeraKStore update"
     ):
 
         repo = self.write_repo()

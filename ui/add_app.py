@@ -55,7 +55,7 @@ class AddApp(ctk.CTkFrame):
 
         subtitle = ctk.CTkLabel(
             self.form,
-            text="Выберите IPA-файл для добавления в GeraStore",
+            text="Выберите IPA-файл для добавления в GeraKStore",
             text_color="gray"
         )
 
@@ -694,7 +694,7 @@ class AddApp(ctk.CTkFrame):
 
         name = self.ipa_data.get(
             "name",
-            "GeraStore App"
+            "GeraKStore App"
         )
 
         version = self.ipa_data.get(
@@ -787,7 +787,7 @@ class AddApp(ctk.CTkFrame):
 
             name = self.ipa_data.get(
                 "name",
-                "GeraStore App"
+                "GeraKStore App"
             )
 
             version = self.ipa_data.get(
@@ -920,23 +920,23 @@ class AddApp(ctk.CTkFrame):
             self.info.insert(
                 "end",
                 "✓ Приложение добавлено "
-                "в GeraStore Manager.\n"
+                "в GeraKStore Manager.\n"
             )
 
             self.update()
 
             self.info.insert(
                 "end",
-                "Публикация в GeraStore...\n"
+                "Публикация в GeraKStore...\n"
             )
 
             self.update()
 
             try:
 
-                from core.gerastore_sync import GeraStoreSync
+                from core.gerastore_sync import GeraKStoreSync
 
-                sync = GeraStoreSync()
+                sync = GeraKStoreSync()
 
                 result = sync.sync(
                     commit_message=f"Add {name} {version} from Manager"
@@ -946,7 +946,7 @@ class AddApp(ctk.CTkFrame):
 
                     self.info.insert(
                         "end",
-                        "✓ GeraStore опубликован.\n\n"
+                        "✓ GeraKStore опубликован.\n\n"
                     )
 
                 else:
@@ -965,7 +965,7 @@ class AddApp(ctk.CTkFrame):
                     "\nОШИБКА ПУБЛИКАЦИИ:\n"
                     f"{sync_error}\n\n"
                     "Приложение сохранено в Manager, "
-                    "но GeraStore не обновлён.\n\n"
+                    "но GeraKStore не обновлён.\n\n"
                 )
 
                 self.update()

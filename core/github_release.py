@@ -176,6 +176,33 @@ class GitHubRelease:
         file_path
     ):
 
+        file_name = os.path.basename(
+            file_path
+        )
+
+        # ==================================================
+        # CHECK EXISTING ASSET
+        # ==================================================
+
+        assets = self.get_assets(
+            release
+        )
+
+        for asset in assets:
+
+            if asset.get("name") == file_name:
+
+                print(
+                    "GitHub asset уже существует:",
+                    file_name
+                )
+
+                return asset
+
+        # ==================================================
+        # UPLOAD NEW ASSET
+        # ==================================================
+
         upload_url = release.get(
             "upload_url",
             ""
@@ -191,10 +218,6 @@ class GitHubRelease:
             "{",
             1
         )[0]
-
-        file_name = os.path.basename(
-            file_path
-        )
 
         url = (
             f"{upload_url}"

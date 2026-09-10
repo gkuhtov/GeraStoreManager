@@ -3,17 +3,17 @@ from pathlib import Path
 from xml.sax.saxutils import escape
 
 
-GERASTORE_DIR = os.path.expanduser(
-    "~/Projects/GeraStore"
+GERAKSTORE_DIR = os.path.expanduser(
+    "~/Projects/GeraKStore"
 )
 
 PLIST_DIR = os.path.join(
-    GERASTORE_DIR,
+    GERAKSTORE_DIR,
     "plist"
 )
 
 PLIST_BASE_URL = (
-    "https://gkuhtov.github.io/GeraStore/plist/"
+    "https://gkuhtov.github.io/GeraKStore/plist/"
 )
 
 
@@ -100,7 +100,7 @@ def write_plist(
     minimum_ios=""
 ) -> str:
     """
-    Пишет файл в ~/Projects/GeraStore/plist/
+    Пишет файл в ~/Projects/GeraKStore/plist/
     и возвращает публичный URL.
     """
 

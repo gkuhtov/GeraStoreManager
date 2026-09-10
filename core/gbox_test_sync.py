@@ -6,7 +6,7 @@ from datetime import datetime, timezone
 MANAGER_APPS = "data/apps.json"
 
 TEST_REPO = os.path.expanduser(
-    "~/Projects/GeraStore-Test"
+    "~/Projects/GeraKStore-Test"
 )
 
 REPO_FILE = os.path.join(
@@ -232,7 +232,7 @@ def build_repo():
 
 
         "sourceName":
-        "GeraStore Test",
+        "GeraKStore Test",
 
 
         "sourceAuthor":
