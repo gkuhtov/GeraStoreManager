@@ -3,12 +3,12 @@ from pathlib import Path
 from xml.sax.saxutils import escape
 
 
-GERASTORE_DIR = os.path.expanduser(
+GERAKSTORE_DIR = os.path.expanduser(
     "~/Projects/GeraKStore"
 )
 
 PLIST_DIR = os.path.join(
-    GERASTORE_DIR,
+    GERAKSTORE_DIR,
     "plist"
 )
 

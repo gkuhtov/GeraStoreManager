@@ -122,13 +122,13 @@ MANAGER_APPS = (
 )
 
 
-GERASTORE_DIR = os.path.expanduser(
+GERAKSTORE_DIR = os.path.expanduser(
     "~/Projects/GeraKStore"
 )
 
 
-GERASTORE_REPO = os.path.join(
-    GERASTORE_DIR,
+GERAKSTORE_REPO = os.path.join(
+    GERAKSTORE_DIR,
     "repo.json"
 )
 
@@ -159,7 +159,7 @@ def get_plist_file_size(
         filename = plist_url.rstrip("/").split("/")[-1]
 
         local_path = (
-            Path(GERASTORE_DIR)
+            Path(GERAKSTORE_DIR)
             / "plist"
             / filename
         )
@@ -325,13 +325,13 @@ class GeraKStoreSync:
     ):
 
         if not os.path.isdir(
-            GERASTORE_DIR
+            GERAKSTORE_DIR
         ):
 
             raise Exception(
                 "GeraKStore репозиторий "
                 "не найден: "
-                + GERASTORE_DIR
+                + GERAKSTORE_DIR
             )
 
     def load_json(
@@ -368,7 +368,7 @@ class GeraKStoreSync:
     ):
 
         return self.load_json(
-            GERASTORE_REPO
+            GERAKSTORE_REPO
         )
 
     def find_old_app(
@@ -1102,7 +1102,7 @@ class GeraKStoreSync:
         repo = self.build_repo()
 
         with open(
-            GERASTORE_REPO,
+            GERAKSTORE_REPO,
             "w",
             encoding="utf-8"
         ) as f:
@@ -1140,7 +1140,7 @@ class GeraKStoreSync:
                 *args
             ],
 
-            cwd=GERASTORE_DIR,
+            cwd=GERAKSTORE_DIR,
 
             capture_output=True,
 
@@ -1165,7 +1165,7 @@ class GeraKStoreSync:
     ):
 
         repo_file = (
-            Path(GERASTORE_DIR)
+            Path(GERAKSTORE_DIR)
             / "repo.json"
         )
 
